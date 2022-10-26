@@ -2,6 +2,18 @@
 
 {% block title %}Panel de control{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+
+    {{ encore_entry_link_tags('admin_layout') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    {{ encore_entry_script_tags('admin_layout') }}
+{% endblock %}
+
 {% block body %}
     {% block header %}
     
