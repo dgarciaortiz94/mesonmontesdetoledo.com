@@ -1,0 +1,22 @@
+.form-wrapper {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: red;
+}
+
+.form-wrapper > form {
+    width: 300px;
+    padding: 15px;
+    background-color: blue;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-wrapper > form input, .form-wrapper > form textarea {
+    margin: 5px 0;
+}
