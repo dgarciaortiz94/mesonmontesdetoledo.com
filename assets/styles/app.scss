@@ -1,36 +1,13 @@
 // FONTS
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 
-// IMPORTS
+// IMPORT LIBRARIES
 @import '~mdb-ui-kit/css/mdb.min.css';
 
-// CSS
-body {
-    background-color: lightgray;
-    font-family: Roboto, Arial, Helvetica, sans-serif;
-}
-
-form input, form textarea {
-    width: 100%;
-    border-radius: 5px;
-    border: 1px solid #bbbbbb;
-    padding: 4px 10px;
-    transition: all .1s linear;
-}
-
-form input:focus, form textarea:focus {
-    outline: 2px solid #4285F4;
-    outline-offset: -2px;
-    // border: 3px solid #4285F4;
-}
-
-button {
-    padding: 4px 15px;
-    border-radius: 5px;
-    border: none;
-    box-shadow: 1px 1px 3px #bbbbbb;
-    margin: 5px 0;
-}
+// IMPORT SCSS
+@import './_vars';
+@import './main.scss';
+@import './components/flash-message.scss';
 
 button:hover {
     

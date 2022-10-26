@@ -1,16 +1,21 @@
+// IMPORT SCSS
+@import './_vars';
+@import './main.scss';
+@import './components/flash-message.scss';
+
 .form-wrapper {
     width: 100vw;
     height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: red;
+    background-color: rgb(197, 255, 197);
 }
 
 .form-wrapper > form {
     width: 300px;
     padding: 15px;
-    background-color: blue;
+    background-color: rgb(193, 193, 255);
     display: flex;
     flex-direction: column;
     justify-content: center;
