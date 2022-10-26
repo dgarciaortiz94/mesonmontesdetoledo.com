@@ -11,3 +11,6 @@ when@test:
     framework:
         validation:
             not_compromised_password: false
+
+            #auto_mapping:
+            App\Entity\: []
