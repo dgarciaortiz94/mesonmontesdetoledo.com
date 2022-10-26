@@ -1,0 +1,23 @@
+.flash-message {
+    padding: 5px 10px;
+    width: 100%;
+    border-left-width: 5px;
+    border-left-style: solid;
+    color: $light;
+    margin: 10px 0;
+}
+
+.flash-success {
+    border-left-color: #007e32;
+    background-color: $success;
+}
+
+.flash-warning {
+    border-left-color: #b98316;
+    background-color: $warning;
+}
+
+.flash-error {
+    border-left-color: #9b1414;
+    background-color: $danger;
+}
