@@ -1,0 +1,51 @@
+$sidenavWidth: 355px;
+$sidenavTransitionTime: .3s;
+
+.sidenav-wrapper.right.opened > .sidenav {
+    right: 0;
+}
+
+.sidenav-wrapper.left.opened > .sidenav {
+    left: 0;
+}
+
+.sidenav-wrapper.opened > .sidenav {
+    -webkit-transition: all $sidenavTransitionTime ease;
+    -moz-transition: all $sidenavTransitionTime ease;
+    -o-transition: all $sidenavTransitionTime ease;
+    transition: all $sidenavTransitionTime ease;
+}
+
+
+
+// Initial position
+.sidenav-wrapper {
+    display: none;
+    width: 100vw;
+    height: 100vh;
+    background-color: #00000050;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10000;
+}
+
+.sidenav-wrapper.right > .sidenav {
+    right: -$sidenavWidth;
+}
+
+.sidenav-wrapper.left > .sidenav {
+    left: -$sidenavWidth;
+}
+
+.sidenav-wrapper > .sidenav {
+    position: absolute;
+    width: $sidenavWidth;
+    height: 100vh;
+    background-color: #ffffff;
+    box-shadow: 0px 0px 5px;
+    -webkit-transition: all $sidenavTransitionTime ease;
+    -moz-transition: all $sidenavTransitionTime ease;
+    -o-transition: all $sidenavTransitionTime ease;
+    transition: all $sidenavTransitionTime ease;
+}

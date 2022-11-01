@@ -15,13 +15,19 @@
 {% endblock %}
 
 {% block body %}
+    {% include "components/admin_panel/sidenav.html.twig" %}
+
+    {% include "components/admin_panel/toolbar.html.twig" %}
+
     {% block header %}
     
     {% endblock %}
 
-    {% block section %}
-    
-    {% endblock %}
+    <section class="container">
+        {% block section %}
+        
+        {% endblock %}
+    </section>
 
     {% block footer %}
     
