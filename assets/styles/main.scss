@@ -4,8 +4,9 @@ body {
     font-family: Roboto, Arial, Helvetica, sans-serif;
 }
 
-body i {
+i.fa, i.fas {
     font-family: 'FontAwesome' !important;
+    font-style: normal !important;
 }
 
 form input, form textarea {
@@ -24,9 +25,8 @@ form input:focus, form textarea:focus {
 }
 
 button {
-    padding: 4px 15px;
-    border-radius: 5px;
+    padding: 0;
     border: none;
-    box-shadow: 1px 1px 3px #bbbbbb;
-    margin: 5px 0;
+    margin: 0;
+    background-color: inherit;
 }
