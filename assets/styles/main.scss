@@ -4,12 +4,17 @@ body {
     font-family: Roboto, Arial, Helvetica, sans-serif;
 }
 
+body i {
+    font-family: 'FontAwesome' !important;
+}
+
 form input, form textarea {
     width: 100%;
     border-radius: 5px;
     border: 1px solid #bbbbbb;
     padding: 4px 10px;
     transition: all .1s linear;
+    margin: 5px 0;
 }
 
 form input:focus, form textarea:focus {

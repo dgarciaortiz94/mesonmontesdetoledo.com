@@ -5,6 +5,7 @@
     border-left-style: solid;
     color: $light;
     margin: 10px 0;
+    font-size: 0.9em;
 }
 
 .flash-success {
@@ -20,4 +21,9 @@
 .flash-error {
     border-left-color: #9b1414;
     background-color: $danger;
+}
+
+.form-error {
+    border: 1px solid $danger;
+    background-color: #ffc8c8;
 }
