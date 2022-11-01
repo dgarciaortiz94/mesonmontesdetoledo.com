@@ -1,43 +1,36 @@
-{% extends 'base.html.twig' %}
+{% extends 'user/base.html.twig' %}
 
-{% block title %}User index{% endblock %}
-
-{% block body %}
+{% block section %}
     <h1>User index</h1>
 
-    <table class="table">
+    <table class="table text-center">
         <thead>
             <tr>
                 <th>Id</th>
                 <th>Email</th>
                 <th>Roles</th>
-                <th>Password</th>
                 <th>Name</th>
                 <th>Firstname</th>
                 <th>Lastname</th>
-                <th>Image</th>
                 <th>CreationDate</th>
                 <th>IsActive</th>
-                <th>actions</th>
+                <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
         {% for user in users %}
-            <tr>
-                <td>{{ user.id }}</td>
+            <tr class="{% if(user.isActive) %}bg-danger text-light{% endif %}">
+                <td><a href="{{ path('app_user_show', {'id': user.id}) }}">{{ user.id }}</a></td>
                 <td>{{ user.email }}</td>
                 <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
-                <td>{{ user.password }}</td>
                 <td>{{ user.name }}</td>
                 <td>{{ user.firstname }}</td>
                 <td>{{ user.lastname }}</td>
-                <td>{{ user.image }}</td>
                 <td>{{ user.creationDate ? user.creationDate|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ user.isActive ? 'Yes' : 'No' }}</td>
-                <td>
-                    <a href="{{ path('app_user_show', {'id': user.id}) }}">show</a>
-                    <a href="{{ path('app_user_edit', {'id': user.id}) }}">edit</a>
-                </td>
+                <td><a href="{{ path('app_user_edit', {'id': user.id}) }}">edit</a></td>
+                <td><a href="{{ path('app_user_edit', {'id': user.id}) }}">desbloquear</a></td>
             </tr>
         {% else %}
             <tr>
