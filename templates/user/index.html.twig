@@ -20,7 +20,7 @@
         </thead>
         <tbody>
         {% for user in users %}
-            <tr class="{% if(user.isActive) %}bg-danger text-light{% endif %}">
+            <tr class="{% if(not user.isActive) %}bg-danger text-light{% endif %}">
                 <td><a href="{{ path('app_user_show', {'id': user.id}) }}">{{ user.id }}</a></td>
                 <td>{{ user.email }}</td>
                 <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
@@ -29,8 +29,9 @@
                 <td>{{ user.lastname }}</td>
                 <td>{{ user.creationDate ? user.creationDate|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ user.isActive ? 'Yes' : 'No' }}</td>
-                <td><a href="{{ path('app_user_edit', {'id': user.id}) }}">edit</a></td>
-                <td><a href="{{ path('app_user_edit', {'id': user.id}) }}">desbloquear</a></td>
+                <td><a href="{{ path('app_user_edit', {'id': user.id}) }}"><i class="fas fa-edit text-warning fa-lg"></i></a></td>
+                <td>{% include "user/_block_form.html.twig" %}</td>
+                <td>{% include "user/_delete_form.html.twig" %}</td>
             </tr>
         {% else %}
             <tr>

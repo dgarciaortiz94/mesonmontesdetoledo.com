@@ -27,6 +27,11 @@ class UserController extends AbstractController
     public function new(Request $request, UserRepository $userRepository, UserPasswordHasherInterface $passwordHasher): Response
     {
         $user = new User();
+
+        $user->setRoles(["ROLE_USER"]);
+        $user->setCreationDate(new DateTime());
+        $user->setIsActive(true);
+
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
@@ -46,9 +51,15 @@ class UserController extends AbstractController
             return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
         }
 
+        if (count($form->getErrors()) > 0) { 
+            $errorOrigin = $form->getErrors()[0]->getOrigin()->getName();
+            $this->addFlash('error', $form->getErrors()[0]->getMessage());
+        }
+
         return $this->renderForm('user/new.html.twig', [
             'user' => $user,
             'form' => $form,
+            'error_origin' => isset($errorOrigin) ? $errorOrigin : false,
         ]);
     }
 
@@ -80,10 +91,25 @@ class UserController extends AbstractController
             return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
         }
 
+        if (count($form->getErrors()) > 0) $this->addFlash('error', $form->getErrors()[0]);
+
         return $this->renderForm('user/edit.html.twig', [
             'user' => $user,
             'form' => $form,
         ]);
+    }
+
+    #[Route('/{id}/block', name: 'app_user_block', methods: ['POST'])]
+    public function block(Request $request, User $user, UserRepository $userRepository): Response
+    {
+        if ($this->isCsrfTokenValid('block'.$user->getId(), $request->request->get('_token'))) {
+            if ($user->getIsActive()) $user->setIsActive(false);
+            else $user->setIsActive(true);
+
+            $userRepository->save($user, true);
+        }
+
+        return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
     }
 
     #[Route('/{id}', name: 'app_user_delete', methods: ['POST'])]
