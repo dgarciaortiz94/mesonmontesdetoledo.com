@@ -1,5 +1,5 @@
 {# templates/login/index.html.twig #}
-{% extends 'admin_layout.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {# ... #}
 
@@ -26,7 +26,7 @@
     </style>
 {% endblock %}
 
-{% block section %}
+{% block body %}
     <div class="form-wrapper">
         <form action="{{ path('app_login') }}" method="post">
             {% include "components/flash_messages/flash_message.html.twig" with {'type': 'error'} %}
