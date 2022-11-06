@@ -17,13 +17,15 @@
 {% block body %}
     {% include "components/admin_panel/sidenav.html.twig" %}
 
+    {% include "components/admin_panel/profile_bar.html.twig" %}
+
     {% include "components/admin_panel/toolbar.html.twig" %}
 
     {% block header %}
     
     {% endblock %}
 
-    <section class="container">
+    <section class="py-5">
         {% block section %}
         
         {% endblock %}
