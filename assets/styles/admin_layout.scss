@@ -1,13 +1,19 @@
+// IMPORT LIBRARIES
+@import '~datatables.net-dt/css/jquery.dataTables.min.css';
+
 // IMPORT SCSS
 @import './_vars';
 @import './components/flash-message.scss';
 @import './components/admin_layout/sidenav.scss';
 @import './components/admin_layout/toolbar.scss';
+@import './components/admin_layout/crud-table.scss';
+
 
 .form-wrapper {
     width: 100%;
-    height: 100vh;
+    height: 100%;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
 }
@@ -18,4 +24,59 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+.menu {
+    margin: auto;
+}
+
+.menu__item {
+    width: 100%;
+    border-bottom: 1px solid #ffc8007a;
+    color: #000000;
+    -webkit-transition: all .2s ease-in-out;
+    -moz-transition: all .2s ease-in-out;
+    -o-transition: all .2s ease-in-out;
+    transition: all .2s ease-in-out;
+}
+
+.menu__item:hover {
+    background-color: $main;
+}
+
+.menu__item.current {
+    background-color: $main;
+    color: #ffffff;
+}
+
+.menu__item > div {
+    width: fit-content;
+}
+
+.section-box {
+    // border: 2px solid $main;
+    border-radius: 15px;
+    height: 100%;
+    background-color: #ffffff;
+    box-shadow:  0 0 5px #bbbbbb;
+}
+
+.section-box__header {
+    padding: 5px 15px;
+    border-radius: 15px 15px 0 0;
+    background-color: $main;
+    color: #ffffff;
+}
+
+.section-box__title {
+    border-bottom: 2px solid $main;
+    margin-bottom: 30px;
+}
+
+.section-box__body {
+    padding: 30px 15px;
+}
+
+.dataTables_length .form-select {
+    width: 100% !important;
 }
