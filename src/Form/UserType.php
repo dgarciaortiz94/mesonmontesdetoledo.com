@@ -4,8 +4,10 @@ namespace App\Form;
 
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Vich\UploaderBundle\Form\Type\VichFileType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -18,43 +20,77 @@ class UserType extends AbstractType
         $builder
             ->add('email', EmailType::class, [
                 'error_bubbling' => true,
+                'label' => false,
                 'attr' => [
                     'maxlength' => false,
-                    'placeholder' => 'Email',
+                    'placeholder' => 'Correo electrónico',
                 ]
             ])
             ->add('password', PasswordType::class, [
                 'error_bubbling' => true,
+                'label' => false,
                 'attr' => [
-                    'maxlength' => false,
-                    'placeholder' => 'password',
+                    'placeholder' => 'Contraseña',
                 ]
-            ])
+            ]);
+
+        if (! $options['edit']) {
+            $builder
+            ->add('repeatPassword', PasswordType::class, [
+                'error_bubbling' => true,
+                'label' => false,
+                'attr' => [
+                    'placeholder' => 'Repetir contraseña',
+                ]
+            ]);
+        }
+
+        $builder
             ->add('name', TextType::class, [
                 'error_bubbling' => true,
+                'label' => false,
                 'attr' => [
                     'maxlength' => false,
-                    'placeholder' => 'name',
+                    'placeholder' => 'Nombre',
                 ]
             ])
             ->add('firstname', TextType::class, [
                 'error_bubbling' => true,
+                'label' => false,
                 'attr' => [
                     'maxlength' => false,
-                    'placeholder' => 'firstname',
+                    'placeholder' => 'Primer apellido',
                 ]
             ])
             ->add('lastname', TextType::class, [
+                'required' => false,
                 'error_bubbling' => true,
+                'label' => false,
                 'attr' => [
                     'maxlength' => false,
-                    'placeholder' => 'lastname',
+                    'placeholder' => 'Segundo apellido',
                 ]
-            ])
-            ->add('image', FileType::class, [
-                'error_bubbling' => true,
+            ]);
+
+            if ($options['edit']) {
+                $builder
+                ->add('roles', ChoiceType::class, [
+                    'mapped' => false,
+                    'error_bubbling' => true,
+                    'label' => 'Role',
+                    'choices' => [
+                        'Usuario' => '["ROLE_USER"]',
+                        'Administrador' => '["ROLE_ADMIN"]',
+                    ],
+                ]);
+            }
+
+        $builder
+            ->add('imageFile', VichFileType::class, [
                 'required' => false,
-                'label' => 'Image',
+                'label' => 'Imagen',
+                'allow_delete' => false,
+                'download_uri' => false,
             ])
         ;
     }
@@ -63,6 +99,7 @@ class UserType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => User::class,
+            'edit' => false,
         ]);
     }
 }

@@ -1,4 +1,4 @@
-<form method="post" action="{{ path('app_user_block', {'id': user.id}) }}" onsubmit="return confirm('Are you sure you want to block this user?');">
+<form method="post" action="{{ path('app_user_block', {'id': user.id}) }}" onsubmit="return confirm('¿Estás seguro que deseas {{ user.isActive ? 'bloquear' : 'desbloquear' }} este usuario?');">
     <input type="hidden" name="_token" value="{{ csrf_token('block' ~ user.id) }}">
-    <button>{% if(user.isActive) %}bloquear{% else %}desbloquear{% endif %}</button>
+    <button class="text-primary">{{ user.isActive ? 'bloquear' : 'desbloquear' }}</button>
 </form>

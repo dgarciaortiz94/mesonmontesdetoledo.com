@@ -1,0 +1,15 @@
+{% include "components/flash_messages/flash_message.html.twig" with {'type': 'error'} %}
+
+<div>
+    {{ form_start(form) }}
+        {% for field in form.children %}
+            {% set fieldClass = (field.vars.attr.class is defined) ? field.vars.attr.class : '' %}
+            {{ form_label(field)}}
+            {{ form_widget(field, {'attr': {'class': (error_origin is defined and error_origin == field.vars.name) ? 'form-error' : fieldClass} }) }}
+        {% endfor %}
+
+        <div class="w-100 d-flex justify-content-center">
+            <button class="btn btn-primary mt-4"><i class="fas fa-search"></i>&nbsp {{ button_label|default('Buscar') }}</button>
+        </div>
+    {{ form_end(form) }}
+</div>
