@@ -1,31 +1,39 @@
 <nav class="navbar navbar-expand-lg text-center toolbar">
     <!-- Container wrapper -->
-    <div class="container-fluid px-5">
-      <!-- Toggle button -->
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-mdb-toggle="collapse"
-        data-mdb-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <i class="fas fa-bars"></i>
-      </button>
+    <div class="container-fluid px-2 px-sm-3 px-lg-4 px-xl-5">
 
-    <div type="button" class="sidenav-trigger menu-button d-flex align-items-center" data-target="#menu-sidenav"><i class="fa fa-thin fa-bars fa-lg"></i></div>
+      <div type="button" class="sidenav-trigger menu-button d-flex align-items-center" data-target="#menu-sidenav"><i class="fa fa-thin fa-bars fa-lg"></i></div>
   
+      {# {% for item in knp_menu_get('main').children %}
+              {% if (not app.request.attributes.get('_route_params')) and (path(app.request.attributes.get('_route')) == item.uri) %}
+                  <div class="menu__item p-3 current">
+                      <i class="{{ item.getExtra('icon') }}"></i>
+                      <span class="mx-2">{{ item.name }}</span>
+                  </div>
+              {% else %}
+                  <a href="{{ item.uri }}">
+                      <div class="menu__item p-3">
+                          <i class="{{ item.getExtra('icon') }}"></i>
+                          <span class="mx-2">{{ item.name }}</span>
+                      </div>
+                  </a>
+              {% endif %}
+      {% endfor %} #}
+
+
+
       <!-- Right elements -->
       <div class="d-flex align-items-center">
         <!-- Icon -->
         <a class="text-reset me-3" href="#">
-          <i class="fas fa-shopping-cart"></i>
+          <i class="far fa-envelope fa-lg"></i>
+          <span class="badge rounded-pill badge-notification bg-danger">1</span>
         </a>
   
         <!-- Notifications -->
         <div class="dropdown">
           <a
+            id="toolbar__notifications-icon"
             class="text-reset me-3 dropdown-toggle hidden-arrow"
             href="#"
             id="navbarDropdownMenuLink"
@@ -33,23 +41,22 @@
             data-mdb-toggle="dropdown"
             aria-expanded="false"
           >
-            <i class="fas fa-bell"></i>
-            <span class="badge rounded-pill badge-notification bg-danger">1</span>
+            <i class="far fa-bell fa-lg"></i>
+            {% if (app.user.notifications | filter(notification => not notification.isViewed) | length) > 0 %}
+              <span id="toolbar__notifications-warning" class="badge rounded-pill badge-notification bg-danger">
+                {{ app.user.notifications | filter(notification => not notification.isViewed) | length }}
+              </span>
+            {% endif %}
           </a>
-          <ul
-            class="dropdown-menu dropdown-menu-end"
+          <div
+            id="toolbar__notifications-list"
+            class="dropdown-menu dropdown-menu-end toolbar__notifications-list"
             aria-labelledby="navbarDropdownMenuLink"
           >
-            <li>
-              <a class="dropdown-item" href="#">Some news</a>
-            </li>
-            <li>
-              <a class="dropdown-item" href="#">Another news</a>
-            </li>
-            <li>
-              <a class="dropdown-item" href="#">Something else here</a>
-            </li>
-          </ul>
+            {% for notification in app.user.notifications %}
+              <div class="toolbar__notification-item {% if not notification.isViewed %}no-viewed{% endif %}">{{ notification.message | raw }}</div>
+            {% endfor %}
+          </div>
         </div>
         <!-- Avatar -->
         <div class="dropdown">
@@ -68,7 +75,7 @@
             aria-labelledby="navbarDropdownMenuAvatar"
           >
             <li>
-              <a class="dropdown-item" href="#">My profile</a>
+              <div type="button" class="sidenav-trigger dropdown-item" data-target="#profile-bar" href="#" async data-async-path="{{ path('app_profile_edit', {'id': app.user.id}) }}" data-async-target="#profile-sidenav-body">My profile</div>
             </li>
             <li>
               <a class="dropdown-item" href="#">Settings</a>
@@ -82,4 +89,4 @@
       <!-- Right elements -->
     </div>
     <!-- Container wrapper -->
-  </nav>
+</nav>
