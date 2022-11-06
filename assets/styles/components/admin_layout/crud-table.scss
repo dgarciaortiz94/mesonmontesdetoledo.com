@@ -1,0 +1,42 @@
+.crud-table > thead {
+    background-color: $main;
+    color: #ffffff;
+}
+
+.crud-table td {
+    vertical-align: middle;
+}
+
+.crud-table__record.blocked {
+    background-color: #dddddd;
+}
+
+.crud-table__record.blocked > td {
+    opacity: 0.5;
+}
+
+.crud-table__state, .crud-table__tool {
+    opacity: 1 !important;
+}
+
+.crud-table__tool {
+    text-align: center;
+}
+
+.isActive-true {
+    border-radius: 10px;
+    background-color: $success;
+    color: #ffffff;
+    text-align: center;
+    width: fit-content;
+    padding: 0 10px;
+}
+
+.isActive-false {
+    border-radius: 10px;
+    background-color: $danger;
+    color: #ffffff;
+    text-align: center;
+    width: fit-content;
+    padding: 0 10px;
+}
