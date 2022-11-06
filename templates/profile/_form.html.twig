@@ -1,0 +1,10 @@
+{% include "components/flash_messages/flash_message.html.twig" with {'type': 'success'} %}
+{% include "components/flash_messages/flash_message.html.twig" with {'type': 'error'} %}
+
+{{ form_start(form, {'action': path('app_profile_edit', {'id': app.user.id}), 'method': 'POST'}) }}
+    {% for field in form.children %}
+        {{ form_widget(field, {'attr': {'class': (error_origin is defined and error_origin == field.vars.name) ? 'form-error'} }) }}
+    {% endfor %}
+
+    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}
