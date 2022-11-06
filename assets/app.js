@@ -11,6 +11,7 @@ import './styles/app.scss';
 // libraries
 import 'jquery';
 import 'mdb-ui-kit';
+import './scripts/features/asyncHTML';
 
 // start the Stimulus application
 import './bootstrap';
