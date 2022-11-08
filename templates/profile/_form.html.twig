@@ -6,5 +6,33 @@
         {{ form_widget(field, {'attr': {'class': (error_origin is defined and error_origin == field.vars.name) ? 'form-error'} }) }}
     {% endfor %}
 
-    <button class="btn">{{ button_label|default('Save') }}</button>
+    <button class="btn btn-primary">{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}
+
+
+<script>
+    var form = document.getElementsByName('profile')[0];
+    var htmlWrapper = $('#profile-sidenav-body');
+
+    form.addEventListener('submit', e => {
+        e.preventDefault();
+
+        var formData = new FormData(form);
+
+        $.ajax({
+            url : form.getAttribute('action'),
+            data: formData,
+            type : 'POST',
+            dataType : 'html',
+            processData: false,
+            contentType: false,
+            success : function(html) {
+                htmlWrapper.html(html);
+            },
+            error : function(xhr, status) {
+                if (xhr.status == 422) htmlWrapper.html(xhr.responseText);
+                else htmlWrapper.html("<div class='flash-message flash-error'>Lo sentimos, hubo un error</div>");
+            }
+        });
+    });
+</script>
