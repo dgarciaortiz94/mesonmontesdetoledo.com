@@ -1,5 +1,18 @@
+{% set animation = "" %}
+
+{% if type == "success" %}
+    {% set animation = "animate__fadeInDown" %}
+{% elseif type == "warning" %}
+    {% set animation = "animate__pulse" %}
+{% elseif type == "error" %}
+    {% set animation = "animate__bounce" %}
+{% else %}
+    {% set animation = "animate__headShake" %}
+{% endif %}
+
+
 {% for message in app.flashes(type) %}
-    <div class="flash-message flash-{{type}}">
+    <div class="flash-message flash-{{type}} animate__animated {{animation}}">
         {{ message }}
     </div>
 {% endfor %}
