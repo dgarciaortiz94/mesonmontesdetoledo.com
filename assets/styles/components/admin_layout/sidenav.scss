@@ -49,3 +49,7 @@ $sidenavTransitionTime: .3s;
     -o-transition: all $sidenavTransitionTime ease;
     transition: all $sidenavTransitionTime ease;
 }
+
+.sidenav__body {
+    height: 100%;
+}
