@@ -126,17 +126,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getRepeatPassword()
-    {
-        return $this->repeatPassword;
-    }
+    // public function getRepeatPassword()
+    // {
+    //     return $this->repeatPassword;
+    // }
 
-    public function setRepeatPassword($repeatPassword): self
-    {
-        $this->repeatPassword = $repeatPassword;
+    // public function setRepeatPassword($repeatPassword): self
+    // {
+    //     $this->repeatPassword = $repeatPassword;
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
     /**
      * @see UserInterface

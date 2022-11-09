@@ -38,6 +38,7 @@ class UserType extends AbstractType
             $builder
             ->add('repeatPassword', PasswordType::class, [
                 'error_bubbling' => true,
+                'mapped' => false,
                 'label' => false,
                 'attr' => [
                     'placeholder' => 'Repetir contraseña',
