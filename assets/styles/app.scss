@@ -3,12 +3,9 @@
 
 // IMPORT LIBRARIES
 @import '~mdb-ui-kit/css/mdb.min.css';
+@import '~animate.css/animate.min.css';
 
 // IMPORT SCSS
 @import './_vars';
 @import './main.scss';
 @import './components/flash-message.scss';
-
-button:hover {
-    
-}
