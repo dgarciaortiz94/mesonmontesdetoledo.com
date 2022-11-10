@@ -15,10 +15,16 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/admin-panel/profile')]
 class ProfileController extends AbstractController
 {
-    #[Route('/', name: 'app_profile_show')]
-    public function show(): Response
+    #[Route('/{id}', name: 'app_profile_show')]
+    public function show(User $user, UserRepository $userRepository): Response
     {
-        return $this->render('profile/show.html.twig', []);
+        $myProfile = $userRepository->find($this->getUser()->getId());
+
+        if ($user->getId() != $myProfile->getId()) dd('No se puede visualizar un perfil que no sea el tuyo');
+
+        return $this->render('profile/show.html.twig', [
+            'user' => $user,
+        ]);
     }
 
     #[Route('/{id}/edit', name: 'app_profile_edit', methods: ['GET', 'POST'])]
