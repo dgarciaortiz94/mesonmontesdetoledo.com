@@ -2,6 +2,9 @@
 
 namespace App\Entity;
 
+use App\Entity\Notification\NewUserNotification;
+use App\Entity\Notification\Notification;
+use App\Entity\Notification\UserBlockedNotification;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -57,12 +60,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?bool $isActive = null;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Notification::class, orphanRemoval: true)]
-    private Collection $notifications;
+    #[ORM\ManyToMany(targetEntity: NewUserNotification::class, mappedBy: 'user')]
+    private Collection $newUserNotifications;
+
+    #[ORM\ManyToMany(targetEntity: UserBlockedNotification::class, mappedBy: 'user')]
+    private Collection $userBlockedNotifications;
 
     public function __construct()
     {
-        $this->notifications = new ArrayCollection();
+        $this->newUserNotifications = new ArrayCollection();
+        $this->userBlockedNotifications = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -256,33 +263,73 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function getNotifications(): Collection 
+    {
+        $collection = new ArrayCollection();
+
+        foreach ($this->newUserNotifications as $newUserNotification) {
+            $collection->add($newUserNotification);
+        }
+
+        foreach ($this->userBlockedNotifications as $userBlockedNotification) {
+            $collection->add($userBlockedNotification);
+        }
+
+        return $collection;
+    }
+
     /**
-     * @return Collection<int, Notification>
+     * @return Collection<int, NewUserNotification>
      */
-    public function getNotifications(): Collection
+    public function getNewUserNotifications(): Collection
     {
-        return $this->notifications;
+        return $this->newUserNotifications;
     }
 
-    public function addNotification(Notification $notification): self
+    public function addNewUserNotification(NewUserNotification $newUserNotification): self
     {
-        if (!$this->notifications->contains($notification)) {
-            $this->notifications->add($notification);
-            $notification->setUser($this);
+        if (!$this->newUserNotifications->contains($newUserNotification)) {
+            $this->newUserNotifications->add($newUserNotification);
+            $newUserNotification->addUser($this);
         }
 
         return $this;
     }
 
-    public function removeNotification(Notification $notification): self
+    public function removeNewUserNotification(NewUserNotification $newUserNotification): self
     {
-        if ($this->notifications->removeElement($notification)) {
-            // set the owning side to null (unless already changed)
-            if ($notification->getUser() === $this) {
-                $notification->setUser(null);
-            }
+        if ($this->newUserNotifications->removeElement($newUserNotification)) {
+            $newUserNotification->removeUser($this);
         }
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, UserBlockedNotification>
+     */
+    public function getUserBlockedNotifications(): Collection
+    {
+        return $this->userBlockedNotifications;
+    }
+
+    public function addUserBlockedNotification(UserBlockedNotification $userBlockedNotification): self
+    {
+        if (!$this->userBlockedNotifications->contains($userBlockedNotification)) {
+            $this->userBlockedNotifications->add($userBlockedNotification);
+            $userBlockedNotification->addUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserBlockedNotification(UserBlockedNotification $userBlockedNotification): self
+    {
+        if ($this->userBlockedNotifications->removeElement($userBlockedNotification)) {
+            $userBlockedNotification->removeUser($this);
+        }
+
+        return $this;
+    }
+
 }
