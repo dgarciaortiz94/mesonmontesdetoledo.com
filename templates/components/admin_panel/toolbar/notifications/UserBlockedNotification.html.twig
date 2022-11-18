@@ -1,0 +1,7 @@
+<div class="notification user-blocked-notification">
+    <p>{{ notification.label }}</p>
+    <p>{{ notification.userBlocked.name }} {{ notification.userBlocked.firstname }}</p>
+    <div>
+        <a href="{{ path('app_user_show', {'id': notification.userBlocked.id}) }}">Ir a desbloquear</a>
+    </div>
+</div>

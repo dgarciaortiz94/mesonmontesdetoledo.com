@@ -1,0 +1,7 @@
+<div class="notification new-user-notification">
+    <p>{{ notification.label }}</p>
+    <p>{{ notification.newUser.name }} {{ notification.newUser.firstname }}</p>
+    <div>
+        <a href="{{ path('app_user_show', {'id': notification.newUser.id}) }}">Ver usuario</a>
+    </div>
+</div>
