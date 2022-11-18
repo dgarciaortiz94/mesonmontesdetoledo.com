@@ -2,12 +2,15 @@
 
 namespace App\Controller;
 
-use App\Entity\Notification;
+use App\Entity\Notification\NewUserNotification;
+use App\Entity\Notification\UserBlockedNotification;
 use App\Entity\User;
 use App\Form\SearchUserType;
 use App\Form\UserType;
-use App\Repository\NotificationRepository;
+use App\Repository\Notification\NewUserNotificationRepository;
+use App\Repository\Notification\UserBlockedNotificationRepository;
 use App\Repository\UserRepository;
+use App\Services\Notification\NotificationChooser;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
@@ -20,7 +23,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class UserController extends AbstractController
 {
     #[Route('/', name: 'app_user_index', methods: ['GET'])]
-    public function index(Request $request, UserRepository $userRepository): Response
+    public function index(Request $request, UserRepository $userRepository, NotificationChooser $notificationChooser): Response
     {
         $user = new User();
 
@@ -49,14 +52,33 @@ class UserController extends AbstractController
             $users = $userRepository->findBy($searchArray);
         }
 
+        $notifications = $this->getUser()->getNotifications();
+
+        $notificationsArray = [];
+
+        foreach ($notifications as $notification) {
+            $notificationsArray[] = $notification;
+        }
+
+        usort($notificationsArray, function($a, $b) {
+            return ($a->getCreationDate() > $b->getCreationDate()) ? -1 : 1;
+        });
+
+        $notificationsHtml = [];
+
+        foreach ($notifications as $notification) {
+            $notificationsHtml[] = $notificationChooser->getNotificationsBlock($notification);
+        }
+
         return $this->render('user/index.html.twig', [
+            'notifications' => $notificationsHtml,
             'users' => isset($users) ? $users : $userRepository->findAll(),
             'form' => $form->createView(),
         ]);
     }
 
     #[Route('/new', name: 'app_user_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, UserRepository $userRepository, UserPasswordHasherInterface $passwordHasher, NotificationRepository $notificationRepository): Response
+    public function new(Request $request, UserRepository $userRepository, UserPasswordHasherInterface $passwordHasher, NewUserNotificationRepository $newUserNotificationRepository): Response
     {
         $user = new User();
 
@@ -68,7 +90,7 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {
-            if ($form->get("password")->getData() != $form->get("repeatPasword")->getData()) {
+            if ($form->get("password")->getData() != $form->get("repeatPassword")->getData()) {
                 $form->get('password')->addError(new FormError('Las contraseñas deben coincidir'));
                 $form->get('repeatPassword')->addError(new FormError('Las contraseñas deben coincidir'));
             }
@@ -85,19 +107,21 @@ class UserController extends AbstractController
                 $user->setIsActive(true);
     
                 $userRepository->save($user, true);
-    
-                $admins = $userRepository->findByRole('ROLE_ADMIN');
-    
+
+                $admins = $userRepository->findByRole("ROLE_ADMIN");
+
+                $notification = new NewUserNotification();
+
                 foreach ($admins as $admin) {
-                    $notification = new Notification();
-                    $notification->setMessage('Se ha registrado un nuevo usuario');
-                    $notification->setUser($admin);
-                    $notification->setCreationDate(new DateTime());
-                    $notification->setIsViewed(false);
-    
-                    $notificationRepository->save($notification, true);
+                    $notification->addUser($admin);   
                 }
     
+                $notification->setNewUser($user);
+                $notification->setCreationDate(new DateTime());
+                $notification->setIsViewed(false);
+
+                $newUserNotificationRepository->save($notification, true);
+
                 return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
             }
         }
@@ -153,10 +177,26 @@ class UserController extends AbstractController
     }
 
     #[Route('/{id}/block', name: 'app_user_block', methods: ['POST'])]
-    public function block(Request $request, User $user, UserRepository $userRepository): Response
+    public function block(Request $request, User $user, UserRepository $userRepository, UserBlockedNotificationRepository $userBlockedNotificationRepository): Response
     {
         if ($this->isCsrfTokenValid('block'.$user->getId(), $request->request->get('_token'))) {
-            if ($user->getIsActive()) $user->setIsActive(false);
+            if ($user->getIsActive()) {
+                $user->setIsActive(false);
+
+                $admins = $userRepository->findByRole("ROLE_ADMIN");
+
+                $notification = new UserBlockedNotification();
+    
+                foreach ($admins as $admin) {
+                    $notification->addUser($admin);   
+                }
+    
+                $notification->setUserBlocked($user);
+                $notification->setCreationDate(new DateTime());
+                $notification->setIsViewed(false);
+    
+                $userBlockedNotificationRepository->save($notification, true);
+            }
             else $user->setIsActive(true);
 
             $userRepository->save($user, true);
@@ -177,16 +217,16 @@ class UserController extends AbstractController
 
 
 
-    #[Route('/check-notifications/mark-as-viewed', name: 'app_user_check-notifications', methods: ['GET'])]
-    public function checkNotifications(NotificationRepository $notificationRepository): Response
-    {
-        $noViewedNotifications = $notificationRepository->findBy(['user' => $this->getUser(), 'isViewed' => false]);
+    // #[Route('/check-notifications/mark-as-viewed', name: 'app_user_check-notifications', methods: ['GET'])]
+    // public function checkNotifications(NotificationRepository $notificationRepository): Response
+    // {
+    //     $noViewedNotifications = $notificationRepository->findBy(['user' => $this->getUser(), 'isViewed' => false]);
 
-        foreach ($noViewedNotifications as $notification) {
-            $notification->setIsViewed(true);
-            $notificationRepository->save($notification, true);
-        }
+    //     foreach ($noViewedNotifications as $notification) {
+    //         $notification->setIsViewed(true);
+    //         $notificationRepository->save($notification, true);
+    //     }
 
-        return $this->json(["success" => true]);
-    }
+    //     return $this->json(["success" => true]);
+    // }
 }
