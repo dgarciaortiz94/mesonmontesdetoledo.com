@@ -7,24 +7,26 @@
     </div>
 
     <div>
-        <div>
-            <p>Email: </p>
-            <p>{{ user.email }}</p>
+        <div class="sidebar-profile-img mb-3" style="background-image: url({{ asset('resources/media/admin/profiles/'~app.user.image) }});"></div>
+        
+        <div class="d-flex">
+            <b>Email: </b>
+            <p class="ms-2">{{ user.email }}</p>
         </div>
 
-        <div>
-            <p>Nombre: </p>
-            <p>{{ user.name }}</p>
+        <div class="d-flex">
+            <b>Nombre: </b>
+            <p class="ms-2">{{ user.name }}</p>
         </div>
 
-        <div>
-            <p>Primer apellido: </p>
-            <p>{{ user.firstname }}</p>
+        <div class="d-flex">
+            <b>Primer apellido: </b>
+            <p class="ms-2">{{ user.firstname }}</p>
         </div>
 
-        <div>
-            <p>Segundo apellido: </p>
-            <p>{{ user.lastname }}</p>
+        <div class="d-flex">
+            <b>Segundo apellido: </b>
+            <p class="ms-2">{{ user.lastname }}</p>
         </div>
     </div>
 </div>
