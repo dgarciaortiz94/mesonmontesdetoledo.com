@@ -1,0 +1,15 @@
+@import './user-blocked-notification.scss';
+
+.notification {
+    position: relative;
+}
+
+.notification.disabled::after {
+    content: "";
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #dddddd7a;
+}

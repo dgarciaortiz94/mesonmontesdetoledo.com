@@ -1,0 +1,23 @@
+@import '../../../_vars';
+
+.notification {
+    padding: 10px;
+    border-bottom: 1px solid #fff3c8;
+}
+
+.notification__label {
+    font-weight: bold;
+    margin: 0;
+}
+
+.user-blocked-notification {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.new-user-notification {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
