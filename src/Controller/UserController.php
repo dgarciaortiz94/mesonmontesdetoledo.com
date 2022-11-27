@@ -10,7 +10,7 @@ use App\Form\UserType;
 use App\Repository\Notification\NewUserNotificationRepository;
 use App\Repository\Notification\UserBlockedNotificationRepository;
 use App\Repository\UserRepository;
-use App\Services\Notification\NotificationChooser;
+use App\Services\Notification\NotificationFactory;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
@@ -23,7 +23,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class UserController extends AbstractController
 {
     #[Route('/', name: 'app_user_index', methods: ['GET'])]
-    public function index(Request $request, UserRepository $userRepository, NotificationChooser $notificationChooser): Response
+    public function index(Request $request, UserRepository $userRepository): Response
     {
         $user = new User();
 
@@ -52,26 +52,7 @@ class UserController extends AbstractController
             $users = $userRepository->findBy($searchArray);
         }
 
-        $notifications = $this->getUser()->getNotifications();
-
-        $notificationsArray = [];
-
-        foreach ($notifications as $notification) {
-            $notificationsArray[] = $notification;
-        }
-
-        usort($notificationsArray, function($a, $b) {
-            return ($a->getCreationDate() > $b->getCreationDate()) ? -1 : 1;
-        });
-
-        $notificationsHtml = [];
-
-        foreach ($notifications as $notification) {
-            $notificationsHtml[] = $notificationChooser->getNotificationsBlock($notification);
-        }
-
         return $this->render('user/index.html.twig', [
-            'notifications' => $notificationsHtml,
             'users' => isset($users) ? $users : $userRepository->findAll(),
             'form' => $form->createView(),
         ]);
@@ -161,7 +142,7 @@ class UserController extends AbstractController
                     $form->get("password")->getData(),
                 );
                 $user->setPassword($hashedPassword);
-            }
+            } 
 
             $userRepository->save($user, true);
 
@@ -221,6 +202,8 @@ class UserController extends AbstractController
     // public function checkNotifications(NotificationRepository $notificationRepository): Response
     // {
     //     $noViewedNotifications = $notificationRepository->findBy(['user' => $this->getUser(), 'isViewed' => false]);
+
+
 
     //     foreach ($noViewedNotifications as $notification) {
     //         $notification->setIsViewed(true);
