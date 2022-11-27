@@ -2,11 +2,20 @@
 {% include "components/flash_messages/flash_message.html.twig" with {'type': 'error'} %}
 
 {{ form_start(form, {'action': path('app_profile_edit', {'id': app.user.id}), 'method': 'POST'}) }}
-    {% for field in form.children %}
-        {{ form_widget(field, {'attr': {'class': (error_origin is defined and error_origin == field.vars.name) ? 'form-error'} }) }}
-    {% endfor %}
+    <div class="sidebar-profile-img mb-3" style="background-image: url({{ asset('resources/media/admin/profiles/'~app.user.image) }});">
+        <div class="sidebar-profile-img__cover"><i class="far fa-image fa-lg text-light"></i></div>
+    </div>
+    {{ form_widget(form.imageFile, {'attr': {'class': (error_origin is defined and error_origin == form.imageFile.vars.name) ? 'dd-none form-error' : 'd-none'} }) }}
 
-    <button class="btn btn-primary">{{ button_label|default('Save') }}</button>
+    {{ form_row(form.email, {'attr': {'class': (error_origin is defined and error_origin == form.email.vars.name) ? 'form-error'} }) }}
+    {{ form_row(form.lastPassword, {'attr': {'class': (error_origin is defined and error_origin == form.lastPassword.vars.name) ? 'form-error'} }) }}
+    {{ form_row(form.password, {'attr': {'class': (error_origin is defined and error_origin == form.password.vars.name) ? 'form-error'} }) }}
+    {{ form_row(form.repeatPassword, {'attr': {'class': (error_origin is defined and error_origin == form.repeatPassword.vars.name) ? 'form-error'} }) }}
+    {{ form_row(form.name, {'attr': {'class': (error_origin is defined and error_origin == form.name.vars.name) ? 'form-error'} }) }}
+    {{ form_row(form.firstname, {'attr': {'class': (error_origin is defined and error_origin == form.firstname.vars.name) ? 'form-error'} }) }}
+    {{ form_row(form.lastname, {'attr': {'class': (error_origin is defined and error_origin == form.lastname.vars.name) ? 'form-error'} }) }}
+
+    <button class="btn btn-warning mt-3">{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}
 
 
@@ -35,4 +44,12 @@
             }
         });
     });
+
+    var profileImg = document.getElementsByClassName('sidebar-profile-img');
+
+    for (const img of profileImg) {
+        img.addEventListener('click', e => {
+            document.getElementById('profile_imageFile_file').click();
+        })
+    }
 </script>
