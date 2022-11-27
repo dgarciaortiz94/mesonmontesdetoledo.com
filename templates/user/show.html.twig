@@ -1,56 +1,41 @@
 {% extends 'user/base.html.twig' %}
 
 {% block section %}
-    <h1>User</h1>
+    <div class="container">
+        <div class="user-card">
+            <div class="py-2 section-box__title d-flex justify-content-between align-items-center">
+                <p class="h5"><i class="fas fa-user-alt"></i>&nbsp Perfil</p>
+                <div class="d-flex">
+                    <a href="{{ path('app_user_index') }}"><i class="fas fa-angle-double-left fa-lg"></i></a>
+                    <a href="{{ path('app_user_edit', {'id': user.id}) }}" type="button" id="edit-profile-button" class="px-3"><i class="fas fa-edit text-warning"></i></a>
+                    <div class="pe-3">{% include "user/_block_form.html.twig" %}</div>
+                    {{ include('user/_delete_form.html.twig') }}
+                </div>
+            </div>
+        
+            <table class="table">
+                <div class="sidebar-profile-img mb-3" style="background-image: url({{ asset('resources/media/admin/profiles/'~user.image) }});"></div>
+                
+                <tr class="mb-3">
+                    <td class="ms-2"><b class="me-2">Email:</b> {{ user.email }}</td>
+                </tr>
+        
+                <tr class="mb-3">
+                    <td class="ms-2"><b class="me-2">Nombre:</b> {{ user.name }}</td>
+                </tr>
+        
+                <tr class="mb-3">
+                    <td class="ms-2"><b class="me-2">Primer apellido:</b> {{ user.firstname }}</td>
+                </tr>
+        
+                <tr class="mb-3">
+                    <td class="ms-2"><b class="me-2">Segundo apellido:</b> {{ user.lastname }}</td>
+                </tr>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ user.id }}</td>
-            </tr>
-            <tr>
-                <th>Email</th>
-                <td>{{ user.email }}</td>
-            </tr>
-            <tr>
-                <th>Roles</th>
-                <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
-            </tr>
-            <tr>
-                <th>Password</th>
-                <td>{{ user.password }}</td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ user.name }}</td>
-            </tr>
-            <tr>
-                <th>Firstname</th>
-                <td>{{ user.firstname }}</td>
-            </tr>
-            <tr>
-                <th>Lastname</th>
-                <td>{{ user.lastname }}</td>
-            </tr>
-            <tr>
-                <th>Image</th>
-                <td>{{ user.image }}</td>
-            </tr>
-            <tr>
-                <th>CreationDate</th>
-                <td>{{ user.creationDate ? user.creationDate|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>IsActive</th>
-                <td>{{ user.isActive ? 'Yes' : 'No' }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_user_index') }}">back to list</a>
-
-    <a href="{{ path('app_user_edit', {'id': user.id}) }}">edit</a>
-
-    {{ include('user/_delete_form.html.twig') }}
+                <tr class="mb-3">
+                    <td class="ms-2"><b class="me-2">Roles:</b> {{ user.roles ? user.roles|json_encode : '' }}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
 {% endblock %}
