@@ -7,6 +7,7 @@
 @import './components/admin_layout/sidenav.scss';
 @import './components/admin_layout/toolbar.scss';
 @import './components/admin_layout/crud-table.scss';
+@import './components/admin_layout/notifications/notifications.scss';
 
 
 .form-wrapper {
@@ -79,4 +80,14 @@
 
 .dataTables_length .form-select {
     width: 100% !important;
+}
+
+.user-card {
+    width: 100%;
+    max-width: 400px;
+    background-color: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 0 5px;
+    padding: 15px;
+    margin: auto;
 }
