@@ -22,15 +22,17 @@ class UserBlockedNotification implements NotificationInterface
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'userBlockedNotifications')]
     private Collection $user;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $userBlocked = null;
-
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $creationDate = null;
 
     #[ORM\Column]
     private ?bool $isViewed = null;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $userBlocked = null;
+
+    
 
     public function __construct()
     {
@@ -66,18 +68,6 @@ class UserBlockedNotification implements NotificationInterface
         return $this;
     }
 
-    public function getUserBlocked(): ?User
-    {
-        return $this->userBlocked;
-    }
-
-    public function setUserBlocked(User $userBlocked): self
-    {
-        $this->userBlocked = $userBlocked;
-
-        return $this;
-    }
-
     public function getCreationDate(): ?\DateTimeInterface
     {
         return $this->creationDate;
@@ -107,6 +97,12 @@ class UserBlockedNotification implements NotificationInterface
      */ 
     public function getLabel(): string
     {
+        if ($this->getUserBlocked()) {
+            $this->setLabel(
+                $this->getUserBlocked()->getName() . " " . $this->getUserBlocked()->getFirstname() . " " . $this->getUserBlocked()->getLastname() . " ha sido bloqueado"
+            );
+        }
+
         return $this->label;
     }
 
@@ -118,6 +114,18 @@ class UserBlockedNotification implements NotificationInterface
     public function setLabel(string $label): self
     {
         $this->label = $label;
+
+        return $this;
+    }
+
+    public function getUserBlocked(): ?User
+    {
+        return $this->userBlocked;
+    }
+
+    public function setUserBlocked(?User $userBlocked): self
+    {
+        $this->userBlocked = $userBlocked;
 
         return $this;
     }

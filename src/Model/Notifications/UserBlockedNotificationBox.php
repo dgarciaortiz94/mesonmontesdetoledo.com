@@ -9,10 +9,12 @@ use Twig\Environment;
 class UserBlockedNotificationBox {
 
     private Environment $twig;
+    private NotificationInterface $notification;
 
-    public function __construct(Environment $twig)
+    public function __construct(NotificationInterface $notification, Environment $twig)
     {
         $this->twig = $twig;
+        $this->notification = $notification;
     }
     
     public function create(): NotificationInterface
@@ -20,10 +22,10 @@ class UserBlockedNotificationBox {
         return new UserBlockedNotification();
     }
 
-    public function render(NotificationInterface $notification): string
+    public function render(): string
     {
         return $this->twig->render("components/admin_panel/toolbar/notifications/UserBlockedNotification.html.twig", [
-            "notification" => $notification
+            "notification" => $this->notification
         ]);
     }
 }

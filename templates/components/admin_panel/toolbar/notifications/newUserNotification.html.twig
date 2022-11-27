@@ -1,7 +1,7 @@
-<div class="notification new-user-notification">
-    <p>{{ notification.label }}</p>
-    <p>{{ notification.newUser.name }} {{ notification.newUser.firstname }}</p>
+<div class="notification new-user-notification {% if(notification.isViewed) %}disabled{% endif %}">
     <div>
-        <a href="{{ path('app_user_show', {'id': notification.newUser.id}) }}">Ver usuario</a>
+        <p class="notification__label">{{ notification.label }}</p>
+        <a href="{{ path('app_user_show', {'id': notification.newUser.id}) }}">Ir a {{ notification.newUser.name }} {{ notification.newUser.firstname }}</a>
     </div>
+    <div class="profile-img ms-2" style="background-image: url({{ asset('resources/media/admin/profiles/'~notification.newUser.image) }});"></div>
 </div>

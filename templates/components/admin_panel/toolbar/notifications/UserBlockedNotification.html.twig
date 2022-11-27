@@ -1,7 +1,7 @@
-<div class="notification user-blocked-notification">
-    <p>{{ notification.label }}</p>
-    <p>{{ notification.userBlocked.name }} {{ notification.userBlocked.firstname }}</p>
-    <div>
-        <a href="{{ path('app_user_show', {'id': notification.userBlocked.id}) }}">Ir a desbloquear</a>
+<div class="notification user-blocked-notification {% if(notification.isViewed) %}disabled{% endif %}">
+    <div class="profile-img" style="background-image: url({{ asset('resources/media/admin/profiles/'~notification.userBlocked.image) }});"></div>
+    <div class="ms-2">
+        <p class="notification__label">{{ notification.label }}</p>
+        <a href="{{ path('app_user_show', {'id': notification.userBlocked.id}) }}">Ver usuario</a>
     </div>
 </div>

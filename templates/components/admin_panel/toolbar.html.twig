@@ -53,10 +53,7 @@
             class="dropdown-menu dropdown-menu-end toolbar__notifications-list"
             aria-labelledby="navbarDropdownMenuLink"
           >
-            {% for notification in notifications %}
-              {{ notification | raw }}
-              {# <div class="toolbar__notification-item {% if not notification.isViewed %}no-viewed{% endif %}">{{ notification.message | raw }}</div> #}
-            {% endfor %}
+            {{ render(path('app_notification_component')) }}
           </div>
         </div>
         
@@ -70,7 +67,7 @@
             data-mdb-toggle="dropdown"
             aria-expanded="false"
           >
-            <div class="profile-img" style="background-image: url('{{ asset('resources/media/admin/profiles/cat.webp') }}');"></div>
+            <div class="profile-img" style="background-image: url('{{ asset('resources/media/admin/profiles/'~app.user.image) }}');"></div>
           </a>
           <ul
             class="dropdown-menu dropdown-menu-end"
