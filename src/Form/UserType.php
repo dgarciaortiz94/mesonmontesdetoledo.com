@@ -27,6 +27,8 @@ class UserType extends AbstractType
                 ]
             ])
             ->add('password', PasswordType::class, [
+                'required' => $options['edit'] ? false : true,
+                'empty_data' => '',
                 'error_bubbling' => true,
                 'label' => false,
                 'attr' => [
