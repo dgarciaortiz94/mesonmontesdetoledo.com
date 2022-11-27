@@ -8,7 +8,7 @@ use App\Model\Notifications\UserBlockedNotificationBox;
 use Exception;
 use Twig\Environment;
 
-class NotificationChooser
+class NotificationComponentManager
 {
     private Environment $twig;
 
@@ -17,18 +17,18 @@ class NotificationChooser
         $this->twig = $twig;
     }
 
-    public function getNotificationsBlock(NotificationInterface $notification)
+    public function getNotificationComponent($notification)
     {
-        $notificationBox = "";
+        $notificationBox = false;
 
         if (get_class($notification) == "App\Entity\Notification\NewUserNotification") {
-            $notificationBox = new NewUserNotificationBox($this->twig);
+            $notificationBox = new NewUserNotificationBox($notification, $this->twig);
         } else if (get_class($notification) == "App\Entity\Notification\UserBlockedNotification") {
-            $notificationBox = new UserBlockedNotificationBox($this->twig);
+            $notificationBox = new UserBlockedNotificationBox($notification, $this->twig);
         } else {
             throw new Exception(get_class($notification) . " doesn't exist in NotificationBuilder::getNotificationsBlock");
         }
 
-        return $notificationBox->render($notification);
+        return $notificationBox;
     }
 }
