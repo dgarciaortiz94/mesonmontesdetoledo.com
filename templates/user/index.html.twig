@@ -60,7 +60,8 @@
                                 <tr class="crud-table__record {% if(not user.isActive) %}blocked{% endif %}">
                                     <td>
                                         <a href="{{ path('app_user_show', {'id': user.id}) }}">
-                                            <div class="profile-img" style="background-image: url({{ asset('resources/media/admin/profiles/' ~ user.image ) }});"></div>
+                                            {% set userImg = (user.image) ? user.image : "user.jpg" %}
+                                            <div class="profile-img" style="background-image: url({{ asset('resources/media/admin/profiles/' ~ userImg ) }});"></div>
                                         </a>
                                     </td>
                                     <td>
