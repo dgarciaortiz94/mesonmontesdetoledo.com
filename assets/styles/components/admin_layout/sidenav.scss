@@ -53,3 +53,34 @@ $sidenavTransitionTime: .3s;
 .sidenav__body {
     height: 100%;
 }
+
+.sidebar-profile-img {
+    height: 200px;
+    width: 200px;
+    background-size: cover;
+    background-position: center center;
+    border-radius: 100%;
+    border: 2px solid $main;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.sidebar-profile-img__cover {
+    height: 196px;
+    width: 196px;
+    background-color: #000000;
+    position: absolute;
+    border-radius: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: all .3s ease-in-out;
+    cursor: pointer;
+}
+
+.sidebar-profile-img__cover:hover {
+    opacity: 0.5;
+}
