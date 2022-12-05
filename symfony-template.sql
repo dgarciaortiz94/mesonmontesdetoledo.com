@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 18-11-2022 a las 18:31:59
+-- Tiempo de generación: 05-12-2022 a las 18:31:15
 -- Versión del servidor: 10.4.24-MariaDB
 -- Versión de PHP: 8.1.6
 
@@ -44,7 +44,8 @@ INSERT INTO `doctrine_migration_versions` (`version`, `executed_at`, `execution_
 ('DoctrineMigrations\\Version20221105140906', '2022-11-05 15:09:10', 163),
 ('DoctrineMigrations\\Version20221113111805', '2022-11-13 12:18:08', 72),
 ('DoctrineMigrations\\Version20221113182239', '2022-11-13 19:22:48', 360),
-('DoctrineMigrations\\Version20221113190832', '2022-11-13 20:08:35', 31);
+('DoctrineMigrations\\Version20221113190832', '2022-11-13 20:08:35', 31),
+('DoctrineMigrations\\Version20221121233305', '2022-11-22 00:33:13', 174);
 
 -- --------------------------------------------------------
 
@@ -82,7 +83,7 @@ CREATE TABLE `new_user_notification` (
 --
 
 INSERT INTO `new_user_notification` (`id`, `new_user_id`, `creation_date`, `is_viewed`) VALUES
-(1, 30, '2022-11-13 19:42:49', 0);
+(2, 31, '2022-11-24 23:26:00', 0);
 
 -- --------------------------------------------------------
 
@@ -101,8 +102,8 @@ CREATE TABLE `new_user_notification_user` (
 --
 
 INSERT INTO `new_user_notification_user` (`new_user_notification_id`, `user_id`) VALUES
-(1, 1),
-(1, 6);
+(2, 1),
+(2, 6);
 
 -- --------------------------------------------------------
 
@@ -131,9 +132,10 @@ CREATE TABLE `user` (
 INSERT INTO `user` (`id`, `email`, `roles`, `password`, `name`, `firstname`, `lastname`, `image`, `creation_date`, `is_active`) VALUES
 (1, 'diegodenavas@gmail.com', '[\"ROLE_ADMIN\"]', '$2y$13$0jZdIRhwQrykK3UIqr18vudrCdF/NL3Xm5sTbG39.CQzkKFXB8yiW', 'Diego', 'García', 'Ortiz', 'cat.webp', '2022-10-26 01:01:03', 1),
 (6, 'ivan@example.com', '[\"ROLE_ADMIN\"]', '$2y$13$nFoHvaqV.Cb8OtsqdZNmD.9YJ7dkvkVSKJ/4jUjUw7kPzmCpdT49a', 'Iván', 'García', NULL, 'train-172581671-1000-6366580ab283f731976605.jpg', '2022-11-05 13:33:14', 1),
-(12, 'juan@example.com', '[\"ROLE_USER\"]', '$2y$13$2bn3UnlC/o1wf36SlVwvdeLZoPl/y5vfYIyhCO6h6IrnxkClEMLPa', 'Juan', 'Pérez', NULL, 'design-patterns-636684756f242273021865.png', '2022-11-05 16:42:45', 0),
-(13, 'maria@example.com', '[\"ROLE_USER\"]', '$2y$13$mRFT1LmwB/1qJiGoNMqYUe5IYD0yY61oM179FJjaH7C5zd.0eH7OC', 'María', 'Rodriguez', NULL, 'user-pic-63669edb8a0ae970321152.jpg', '2022-11-05 18:35:23', 1),
-(30, 'notificaciones@notificaciones.es', '[\"ROLE_USER\"]', '$2y$13$4QgJGPKUrw9G.78LzLZI/eVjcShy.IkEtEsPNBb5ZUSRjJ950uiIS', 'Noti', 'Noti', NULL, NULL, '2022-11-13 19:42:49', 1);
+(12, 'juan@example.com', '[\"ROLE_USER\"]', '$2y$13$2bn3UnlC/o1wf36SlVwvdeLZoPl/y5vfYIyhCO6h6IrnxkClEMLPa', 'Juan', 'Pérez', NULL, 'design-patterns-636684756f242273021865.png', '2022-11-05 16:42:45', 1),
+(13, 'maria@example.com', '[\"ROLE_USER\"]', '', 'María', 'Rodriguez', NULL, 'user-637bdef3824ea545025915.jpg', '2022-11-05 18:35:23', 0),
+(30, 'notificaciones@notificaciones.es', '[\"ROLE_USER\"]', '$2y$13$4QgJGPKUrw9G.78LzLZI/eVjcShy.IkEtEsPNBb5ZUSRjJ950uiIS', 'Noti', 'Noti', NULL, NULL, '2022-11-13 19:42:49', 1),
+(31, 'example1@example.com', '[\"ROLE_USER\"]', '$2y$13$aP58Q76aBrmSolGK8hUQdeAgFnBQq7usJLo7ViDdxghpZuXGXL9hm', 'Example1', 'Example1', NULL, NULL, '2022-11-24 23:26:00', 1);
 
 -- --------------------------------------------------------
 
@@ -154,7 +156,16 @@ CREATE TABLE `user_blocked_notification` (
 --
 
 INSERT INTO `user_blocked_notification` (`id`, `user_blocked_id`, `creation_date`, `is_viewed`) VALUES
-(1, 13, '2022-11-13 20:33:38', 0);
+(9, 12, '2022-11-22 00:37:51', 0),
+(10, 12, '2022-11-22 00:38:01', 0),
+(11, 12, '2022-11-22 00:38:10', 0),
+(12, 12, '2022-11-23 23:00:21', 0),
+(13, 12, '2022-11-23 23:21:57', 0),
+(14, 12, '2022-11-24 22:21:30', 0),
+(15, 13, '2022-11-24 22:30:05', 0),
+(16, 6, '2022-11-24 22:30:25', 0),
+(17, 13, '2022-11-24 23:23:22', 0),
+(18, 13, '2022-12-05 18:28:05', 0);
 
 -- --------------------------------------------------------
 
@@ -173,8 +184,26 @@ CREATE TABLE `user_blocked_notification_user` (
 --
 
 INSERT INTO `user_blocked_notification_user` (`user_blocked_notification_id`, `user_id`) VALUES
-(1, 1),
-(1, 6);
+(9, 1),
+(9, 6),
+(10, 1),
+(10, 6),
+(11, 1),
+(11, 6),
+(12, 1),
+(12, 6),
+(13, 1),
+(13, 6),
+(14, 1),
+(14, 6),
+(15, 1),
+(15, 6),
+(16, 1),
+(16, 6),
+(17, 1),
+(17, 6),
+(18, 1),
+(18, 6);
 
 --
 -- Índices para tablas volcadas
@@ -222,7 +251,7 @@ ALTER TABLE `user`
 --
 ALTER TABLE `user_blocked_notification`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `UNIQ_83992B0B869897DA` (`user_blocked_id`);
+  ADD KEY `IDX_83992B0B869897DA` (`user_blocked_id`);
 
 --
 -- Indices de la tabla `user_blocked_notification_user`
@@ -246,19 +275,19 @@ ALTER TABLE `messenger_messages`
 -- AUTO_INCREMENT de la tabla `new_user_notification`
 --
 ALTER TABLE `new_user_notification`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT de la tabla `user_blocked_notification`
 --
 ALTER TABLE `user_blocked_notification`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- Restricciones para tablas volcadas
