@@ -2,12 +2,12 @@
 
 namespace App\Model\Notifications;
 
-use App\Entity\Notification\NotificationInterface;
+use App\Entity\Notification\Notification;
 
 interface NotificationBoxInterface {
     
-    public function create(): NotificationInterface;
+    public function create(): Notification;
 
-    public function render(NotificationInterface $notification): string;
+    public function render(Notification $notification): string;
 
 }

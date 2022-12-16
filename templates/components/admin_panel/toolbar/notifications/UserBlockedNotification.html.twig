@@ -1,4 +1,4 @@
-<div class="notification user-blocked-notification {% if(notification.isViewed) %}disabled{% endif %}">
+<div class="notification user-blocked-notification {% if(notification.isWatched) %}disabled{% endif %}">
     <div class="profile-img" style="background-image: url({{ asset('resources/media/admin/profiles/'~notification.userBlocked.image) }});"></div>
     <div class="ms-2">
         <p class="notification__label">{{ notification.label }}</p>

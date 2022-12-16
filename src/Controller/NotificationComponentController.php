@@ -15,10 +15,6 @@ class NotificationComponentController extends AbstractController
         $notifications = $this->getUser()->getNotifications();
         $notifications = $notifications->getIterator();
 
-        $notifications->uasort(function($a, $b) {
-            return ($a->getCreationDate() > $b->getCreationDate()) ? -1 : 1;
-        });
-
         $notificationComponents = [];
 
         foreach ($notifications as $notification) {

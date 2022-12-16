@@ -10,99 +10,19 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: UserBlockedNotificationRepository::class)]
-class UserBlockedNotification implements NotificationInterface
+class UserBlockedNotification extends Notification
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
-
     private ?string $label = "Un usuario ha sido bloqueado";
 
-    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'userBlockedNotifications')]
-    private Collection $user;
-
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $creationDate = null;
-
-    #[ORM\Column]
-    private ?bool $isViewed = null;
-
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(inversedBy: 'userBlockedNotifications')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $userBlocked = null;
-
-    
-
-    public function __construct()
-    {
-        $this->user = new ArrayCollection();
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-    /**
-     * @return Collection<int, User>
-     */
-    public function getUser(): Collection
-    {
-        return $this->user;
-    }
-
-    public function addUser(User $user): self
-    {
-        if (!$this->user->contains($user)) {
-            $this->user->add($user);
-        }
-
-        return $this;
-    }
-
-    public function removeUser(User $user): self
-    {
-        $this->user->removeElement($user);
-
-        return $this;
-    }
-
-    public function getCreationDate(): ?\DateTimeInterface
-    {
-        return $this->creationDate;
-    }
-
-    public function setCreationDate(\DateTimeInterface $creationDate): self
-    {
-        $this->creationDate = $creationDate;
-
-        return $this;
-    }
-
-    public function isIsViewed(): ?bool
-    {
-        return $this->isViewed;
-    }
-
-    public function setIsViewed(bool $isViewed): self
-    {
-        $this->isViewed = $isViewed;
-
-        return $this;
-    }
 
     /**
      * Get the value of label
      */ 
-    public function getLabel(): string
+    public function getLabel()
     {
-        if ($this->getUserBlocked()) {
-            $this->setLabel(
-                $this->getUserBlocked()->getName() . " " . $this->getUserBlocked()->getFirstname() . " " . $this->getUserBlocked()->getLastname() . " ha sido bloqueado"
-            );
-        }
-
         return $this->label;
     }
 
@@ -111,7 +31,7 @@ class UserBlockedNotification implements NotificationInterface
      *
      * @return  self
      */ 
-    public function setLabel(string $label): self
+    public function setLabel($label)
     {
         $this->label = $label;
 

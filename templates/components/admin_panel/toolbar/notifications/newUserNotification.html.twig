@@ -1,4 +1,4 @@
-<div class="notification new-user-notification {% if(notification.isViewed) %}disabled{% endif %}">
+<div class="notification new-user-notification {% if(notification.isWatched) %}disabled{% endif %}">
     <div>
         <p class="notification__label">{{ notification.label }}</p>
         <a href="{{ path('app_user_show', {'id': notification.newUser.id}) }}">Ir a {{ notification.newUser.name }} {{ notification.newUser.firstname }}</a>

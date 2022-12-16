@@ -2,6 +2,7 @@
 
 namespace App\Model\Notifications;
 
+use App\Entity\Notification\Notification;
 use App\Entity\Notification\NotificationInterface;
 use App\Entity\Notification\UserBlockedNotification;
 use Twig\Environment;
@@ -9,15 +10,15 @@ use Twig\Environment;
 class UserBlockedNotificationBox {
 
     private Environment $twig;
-    private NotificationInterface $notification;
+    private Notification $notification;
 
-    public function __construct(NotificationInterface $notification, Environment $twig)
+    public function __construct(Notification $notification, Environment $twig)
     {
         $this->twig = $twig;
         $this->notification = $notification;
     }
     
-    public function create(): NotificationInterface
+    public function create(): Notification
     {
         return new UserBlockedNotification();
     }
