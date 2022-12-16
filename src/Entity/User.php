@@ -60,16 +60,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?bool $isActive = null;
 
-    #[ORM\ManyToMany(targetEntity: NewUserNotification::class, mappedBy: 'user')]
-    private Collection $newUserNotifications;
+    #[ORM\ManyToMany(targetEntity: Notification::class, mappedBy: 'user')]
+    private Collection $notifications;
 
-    #[ORM\ManyToMany(targetEntity: UserBlockedNotification::class, mappedBy: 'user')]
+    #[ORM\OneToOne(mappedBy: 'newUser', cascade: ['persist', 'remove'])]
+    private ?NewUserNotification $newUserNotification = null;
+
+    #[ORM\OneToMany(mappedBy: 'userBlocked', targetEntity: UserBlockedNotification::class, orphanRemoval: true)]
     private Collection $userBlockedNotifications;
 
     public function __construct()
     {
         $this->newUserNotifications = new ArrayCollection();
         $this->userBlockedNotifications = new ArrayCollection();
+        $this->notifications = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -263,73 +267,78 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getNotifications(): Collection 
-    {
-        $collection = new ArrayCollection();
-
-        foreach ($this->newUserNotifications as $newUserNotification) {
-            $collection->add($newUserNotification);
-        }
-
-        foreach ($this->userBlockedNotifications as $userBlockedNotification) {
-            $collection->add($userBlockedNotification);
-        }
-
-        return $collection;
-    }
-
     /**
-     * @return Collection<int, NewUserNotification>
+     * @return Collection<int, Notification>
      */
-    public function getNewUserNotifications(): Collection
+    public function getNotifications(): Collection
     {
-        return $this->newUserNotifications;
+        return $this->notifications;
     }
 
-    public function addNewUserNotification(NewUserNotification $newUserNotification): self
+    public function addNotification(Notification $notification): self
     {
-        if (!$this->newUserNotifications->contains($newUserNotification)) {
-            $this->newUserNotifications->add($newUserNotification);
-            $newUserNotification->addUser($this);
+        if (!$this->notifications->contains($notification)) {
+            $this->notifications->add($notification);
+            $notification->addUser($this);
         }
 
         return $this;
     }
 
-    public function removeNewUserNotification(NewUserNotification $newUserNotification): self
+    public function removeNotification(Notification $notification): self
     {
-        if ($this->newUserNotifications->removeElement($newUserNotification)) {
-            $newUserNotification->removeUser($this);
+        if ($this->notifications->removeElement($notification)) {
+            $notification->removeUser($this);
         }
 
         return $this;
     }
 
-    /**
-     * @return Collection<int, UserBlockedNotification>
-     */
-    public function getUserBlockedNotifications(): Collection
-    {
-        return $this->userBlockedNotifications;
-    }
+    // public function getNewUserNotification(): ?NewUserNotification
+    // {
+    //     return $this->newUserNotification;
+    // }
 
-    public function addUserBlockedNotification(UserBlockedNotification $userBlockedNotification): self
-    {
-        if (!$this->userBlockedNotifications->contains($userBlockedNotification)) {
-            $this->userBlockedNotifications->add($userBlockedNotification);
-            $userBlockedNotification->addUser($this);
-        }
+    // public function setNewUserNotification(NewUserNotification $newUserNotification): self
+    // {
+    //     // set the owning side of the relation if necessary
+    //     if ($newUserNotification->getNewUser() !== $this) {
+    //         $newUserNotification->setNewUser($this);
+    //     }
 
-        return $this;
-    }
+    //     $this->newUserNotification = $newUserNotification;
 
-    public function removeUserBlockedNotification(UserBlockedNotification $userBlockedNotification): self
-    {
-        if ($this->userBlockedNotifications->removeElement($userBlockedNotification)) {
-            $userBlockedNotification->removeUser($this);
-        }
+    //     return $this;
+    // }
 
-        return $this;
-    }
+    // /**
+    //  * @return Collection<int, UserBlockedNotification>
+    //  */
+    // public function getUserBlockedNotifications(): Collection
+    // {
+    //     return $this->userBlockedNotifications;
+    // }
+
+    // public function addUserBlockedNotification(UserBlockedNotification $userBlockedNotification): self
+    // {
+    //     if (!$this->userBlockedNotifications->contains($userBlockedNotification)) {
+    //         $this->userBlockedNotifications->add($userBlockedNotification);
+    //         $userBlockedNotification->setUserBlocked($this);
+    //     }
+
+    //     return $this;
+    // }
+
+    // public function removeUserBlockedNotification(UserBlockedNotification $userBlockedNotification): self
+    // {
+    //     if ($this->userBlockedNotifications->removeElement($userBlockedNotification)) {
+    //         // set the owning side to null (unless already changed)
+    //         if ($userBlockedNotification->getUserBlocked() === $this) {
+    //             $userBlockedNotification->setUserBlocked(null);
+    //         }
+    //     }
+
+    //     return $this;
+    // }
 
 }

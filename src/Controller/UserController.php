@@ -3,15 +3,18 @@
 namespace App\Controller;
 
 use App\Entity\Notification\NewUserNotification;
+use App\Entity\Notification\Notification;
 use App\Entity\Notification\UserBlockedNotification;
 use App\Entity\User;
 use App\Form\SearchUserType;
 use App\Form\UserType;
 use App\Repository\Notification\NewUserNotificationRepository;
+use App\Repository\Notification\NotificationRepository;
 use App\Repository\Notification\UserBlockedNotificationRepository;
 use App\Repository\UserRepository;
 use App\Services\Notification\NotificationFactory;
 use DateTime;
+use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
@@ -59,7 +62,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/new', name: 'app_user_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, UserRepository $userRepository, UserPasswordHasherInterface $passwordHasher, NewUserNotificationRepository $newUserNotificationRepository): Response
+    public function new(Request $request, UserRepository $userRepository, UserPasswordHasherInterface $passwordHasher, NotificationRepository $notificationRepository, NewUserNotificationRepository $newUserNotificationRepository): Response
     {
         $user = new User();
 
@@ -83,6 +86,8 @@ class UserController extends AbstractController
                 );
                 $user->setPassword($hashedPassword);
     
+                if (is_null($form->get("imageFile")->getData())) $user->setImage('user.jpg');
+
                 $user->setRoles(["ROLE_USER"]);
                 $user->setCreationDate(new DateTime());
                 $user->setIsActive(true);
@@ -91,17 +96,18 @@ class UserController extends AbstractController
 
                 $admins = $userRepository->findByRole("ROLE_ADMIN");
 
-                $notification = new NewUserNotification();
+                $newUserNotification = new NewUserNotification();
+
+                $newUserNotification->setCreatedAt(new DateTimeImmutable());
+                $newUserNotification->setWatched(false);
+                $newUserNotification->setNewUser($user);
+
+                $newUserNotificationRepository->save($newUserNotification, true);
 
                 foreach ($admins as $admin) {
-                    $notification->addUser($admin);   
+                    $admin->addNotification($newUserNotification);
+                    $userRepository->save($user, true);
                 }
-    
-                $notification->setNewUser($user);
-                $notification->setCreationDate(new DateTime());
-                $notification->setIsViewed(false);
-
-                $newUserNotificationRepository->save($notification, true);
 
                 return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
             }
@@ -173,8 +179,8 @@ class UserController extends AbstractController
                 }
     
                 $notification->setUserBlocked($user);
-                $notification->setCreationDate(new DateTime());
-                $notification->setIsViewed(false);
+                $notification->setCreatedAt(new DateTimeImmutable());
+                $notification->setWatched(false);
     
                 $userBlockedNotificationRepository->save($notification, true);
             }
@@ -191,6 +197,8 @@ class UserController extends AbstractController
     {
         if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
             $userRepository->remove($user, true);
+
+            if ($user->getImage() != "default.jpg") unlink("../public/resources/media/admin/profile/".$user->getImage());
         }
 
         return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
