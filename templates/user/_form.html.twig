@@ -5,5 +5,5 @@
         {{ form_widget(field, {'attr': {'class': (error_origin is defined and error_origin == field.vars.name) ? 'form-error'} }) }}
     {% endfor %}
 
-    <button class="btn">{{ button_label|default('Save') }}</button>
+    <button class="btn btn-primary mt-4">{{ button_label|default('Añadir') }}</button>
 {{ form_end(form) }}
