@@ -1,0 +1,55 @@
+{% include "components/flash_messages/flash_message.html.twig" with {'type': 'success'} %}
+{% include "components/flash_messages/flash_message.html.twig" with {'type': 'error'} %}
+
+{{ form_start(form, {'action': path('app_profile_edit', {'id': app.user.id}), 'method': 'POST'}) }}
+    <div class="sidebar-profile-img mb-3" style="background-image: url({{ asset('resources/media/admin/profiles/'~app.user.image) }});">
+        <div class="sidebar-profile-img__cover"><i class="far fa-image fa-lg text-light"></i></div>
+    </div>
+    {{ form_widget(form.imageFile, {'attr': {'class': (error_origin is defined and error_origin == form.imageFile.vars.name) ? 'dd-none form-error' : 'd-none'} }) }}
+
+    {{ form_row(form.email, {'attr': {'class': (error_origin is defined and error_origin == form.email.vars.name) ? 'form-error'} }) }}
+    {{ form_row(form.name, {'attr': {'class': (error_origin is defined and error_origin == form.name.vars.name) ? 'form-error'} }) }}
+    {{ form_row(form.firstname, {'attr': {'class': (error_origin is defined and error_origin == form.firstname.vars.name) ? 'form-error'} }) }}
+    {{ form_row(form.lastname, {'attr': {'class': (error_origin is defined and error_origin == form.lastname.vars.name) ? 'form-error'} }) }}
+
+    <button class="btn btn-warning mt-3">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}
+
+
+<script>
+    var form = document.getElementsByName('profile')[0];
+    var htmlWrapper = $('#profile-sidenav-body');
+
+    form.addEventListener('submit', e => {
+        e.preventDefault();
+
+        var formData = new FormData(form);
+
+        $.ajax({
+            url : form.getAttribute('action'),
+            data: formData,
+            type : 'POST',
+            dataType : 'html',
+            processData: false,
+            contentType: false,
+            success : function(html) {
+                htmlWrapper.html(html);
+            },
+            error : function(xhr, status) {
+                if (xhr.status == 422) htmlWrapper.html(xhr.responseText);
+                else { 
+                    htmlWrapper.html("<div class='flash-message flash-error'>Lo sentimos, hubo un error</div>");
+                    console.log(xhr.responseText);
+                }
+            }
+        });
+    });
+
+    var profileImg = document.getElementsByClassName('sidebar-profile-img');
+
+    for (const img of profileImg) {
+        img.addEventListener('click', e => {
+            document.getElementById('profile_imageFile_file').click();
+        })
+    }
+</script>

@@ -1,0 +1,41 @@
+{% include "components/flash_messages/flash_message.html.twig" with {'type': 'success'} %}
+{% include "components/flash_messages/flash_message.html.twig" with {'type': 'error'} %}
+
+{{ form_start(form, {'action': path('app_admin_panel_security_edit', {'id': app.user.id}), 'method': 'POST'}) }}
+    {{ form_row(form.lastPassword, {'attr': {'class': (error_origin is defined and error_origin == form.lastPassword.vars.name) ? 'form-error'} }) }}
+    {{ form_row(form.password, {'attr': {'class': (error_origin is defined and error_origin == form.password.vars.name) ? 'form-error'} }) }}
+    {{ form_row(form.repeatPassword, {'attr': {'class': (error_origin is defined and error_origin == form.repeatPassword.vars.name) ? 'form-error'} }) }}
+
+    <button class="btn btn-warning mt-3">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}
+
+
+<script>
+    var form = document.getElementsByName('security')[0];
+    var htmlWrapper = $('#profile-sidenav-body');
+
+    form.addEventListener('submit', e => {
+        e.preventDefault();
+
+        var formData = new FormData(form);
+
+        $.ajax({
+            url : form.getAttribute('action'),
+            data: formData,
+            type : 'POST',
+            dataType : 'html',
+            processData: false,
+            contentType: false,
+            success : function(html) {
+                htmlWrapper.html(html);
+            },
+            error : function(xhr, status) {
+                if (xhr.status == 422) htmlWrapper.html(xhr.responseText);
+                else { 
+                    htmlWrapper.html("<div class='flash-message flash-error'>Lo sentimos, hubo un error</div>");
+                    console.log(xhr.responseText);
+                }
+            }
+        });
+    });
+</script>

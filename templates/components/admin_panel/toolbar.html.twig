@@ -42,11 +42,11 @@
             aria-expanded="false"
           >
             <i class="far fa-bell fa-lg"></i>
-            {# {% if (app.user.notifications | filter(notification => not notification.isViewed) | length) > 0 %}
+            {% if (app.user.receivedNotifications | filter(receivedNotification => not receivedNotification.isWatched) | length) > 0 %}
               <span id="toolbar__notifications-warning" class="badge rounded-pill badge-notification bg-danger">
-                {{ app.user.notifications | filter(notification => not notification.isViewed) | length }}
+                {{ app.user.receivedNotifications | filter(receivedNotification => not receivedNotification.isWatched) | length }}
               </span>
-            {% endif %} #}
+            {% endif %}
           </a>
           <div
             id="toolbar__notifications-list"
@@ -74,11 +74,14 @@
             aria-labelledby="navbarDropdownMenuAvatar"
           >
             <li>
-              <div type="button" class="sidenav-trigger dropdown-item" data-target="#profile-bar" href="#" async data-async-path="{{ path('app_profile_edit', {'id': app.user.id}) }}" data-async-target="#profile-sidenav-body">My profile</div>
+              <div type="button" class="sidenav-trigger dropdown-item" data-target="#profile-bar" async data-async-path="{{ path('app_profile_edit', {'id': app.user.id}) }}" data-async-target="#profile-sidenav-body">Perfil</div>
             </li>
             <li>
-              <a class="dropdown-item" href="#">Settings</a>
+              <div type="button" class="sidenav-trigger dropdown-item" data-target="#profile-bar" async data-async-path="{{ path('app_admin_panel_security_edit', {'id': app.user.id}) }}" data-async-target="#profile-sidenav-body">Seguridad</div>
             </li>
+            {# <li>
+              <a class="dropdown-item" href="#">Ajustes</a>
+            </li> #}
             <li>
               <a class="dropdown-item" href="{{ path('app_logout') }}">Logout</a>
             </li>

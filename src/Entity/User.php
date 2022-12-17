@@ -3,13 +3,14 @@
 namespace App\Entity;
 
 use App\Entity\Notification\NewUserNotification;
-use App\Entity\Notification\Notification;
+use App\Entity\Notification\NotificationUser;
 use App\Entity\Notification\UserBlockedNotification;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Serializable;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -18,7 +19,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[Vich\Uploadable]
-class User implements UserInterface, PasswordAuthenticatedUserInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface, Serializable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -60,8 +61,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?bool $isActive = null;
 
-    #[ORM\ManyToMany(targetEntity: Notification::class, mappedBy: 'user')]
-    private Collection $notifications;
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\OneToOne(mappedBy: 'newUser', cascade: ['persist', 'remove'])]
     private ?NewUserNotification $newUserNotification = null;
@@ -69,11 +70,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'userBlocked', targetEntity: UserBlockedNotification::class, orphanRemoval: true)]
     private Collection $userBlockedNotifications;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: NotificationUser::class, orphanRemoval: true)]
+    private Collection $receivedNotifications;
+
     public function __construct()
     {
-        $this->newUserNotifications = new ArrayCollection();
         $this->userBlockedNotifications = new ArrayCollection();
-        $this->notifications = new ArrayCollection();
+        $this->newUserNotifications = new ArrayCollection();
+        $this->receivedNotifications = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -222,7 +226,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         if (null !== $imageFile) {
             // It is required that at least one field changes if you are using doctrine
             // otherwise the event listeners won't be called and the file is lost
-            // $this->updatedAt = new \DateTimeImmutable();
+            $this->updatedAt = new \DateTimeImmutable();
         }
     }
 
@@ -267,78 +271,79 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function getUpdatedAt(): ?\DateTimeImmutable
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(?\DateTimeImmutable $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function serialize()
+    {
+        return serialize(array(
+            $this->id,
+            $this->name,
+            $this->firstname,
+            $this->lastname,
+            $this->email,
+            $this->password,
+            $this->image,
+            $this->receivedNotifications,
+            $this->roles,
+            $this->isActive,
+            $this->updatedAt,
+        ));
+    }
+
+    public function unserialize($serialized)
+    {
+        list(
+            $this->id,
+            $this->name,
+            $this->firstname,
+            $this->lastname,
+            $this->email,
+            $this->password,
+            $this->image,
+            $this->receivedNotifications,
+            $this->roles,
+            $this->isActive,
+            $this->updatedAt,
+        ) = unserialize($serialized);
+    }
+
     /**
-     * @return Collection<int, Notification>
+     * @return Collection<int, NotificationUser>
      */
-    public function getNotifications(): Collection
+    public function getReceivedNotifications(): Collection
     {
-        return $this->notifications;
+        return $this->receivedNotifications;
     }
 
-    public function addNotification(Notification $notification): self
+    public function addReceivedNotification(NotificationUser $receivedNotification): self
     {
-        if (!$this->notifications->contains($notification)) {
-            $this->notifications->add($notification);
-            $notification->addUser($this);
+        if (!$this->receivedNotifications->contains($receivedNotification)) {
+            $this->receivedNotifications->add($receivedNotification);
+            $receivedNotification->setUser($this);
         }
 
         return $this;
     }
 
-    public function removeNotification(Notification $notification): self
+    public function removeReceivedNotification(NotificationUser $receivedNotification): self
     {
-        if ($this->notifications->removeElement($notification)) {
-            $notification->removeUser($this);
+        if ($this->receivedNotifications->removeElement($receivedNotification)) {
+            // set the owning side to null (unless already changed)
+            if ($receivedNotification->getUser() === $this) {
+                $receivedNotification->setUser(null);
+            }
         }
 
         return $this;
     }
-
-    // public function getNewUserNotification(): ?NewUserNotification
-    // {
-    //     return $this->newUserNotification;
-    // }
-
-    // public function setNewUserNotification(NewUserNotification $newUserNotification): self
-    // {
-    //     // set the owning side of the relation if necessary
-    //     if ($newUserNotification->getNewUser() !== $this) {
-    //         $newUserNotification->setNewUser($this);
-    //     }
-
-    //     $this->newUserNotification = $newUserNotification;
-
-    //     return $this;
-    // }
-
-    // /**
-    //  * @return Collection<int, UserBlockedNotification>
-    //  */
-    // public function getUserBlockedNotifications(): Collection
-    // {
-    //     return $this->userBlockedNotifications;
-    // }
-
-    // public function addUserBlockedNotification(UserBlockedNotification $userBlockedNotification): self
-    // {
-    //     if (!$this->userBlockedNotifications->contains($userBlockedNotification)) {
-    //         $this->userBlockedNotifications->add($userBlockedNotification);
-    //         $userBlockedNotification->setUserBlocked($this);
-    //     }
-
-    //     return $this;
-    // }
-
-    // public function removeUserBlockedNotification(UserBlockedNotification $userBlockedNotification): self
-    // {
-    //     if ($this->userBlockedNotifications->removeElement($userBlockedNotification)) {
-    //         // set the owning side to null (unless already changed)
-    //         if ($userBlockedNotification->getUserBlocked() === $this) {
-    //             $userBlockedNotification->setUserBlocked(null);
-    //         }
-    //     }
-
-    //     return $this;
-    // }
-
 }

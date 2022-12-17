@@ -1,0 +1,41 @@
+{% extends 'admin_panel/user/base.html.twig' %}
+
+{% block section %}
+    <div class="container">
+        <div class="user-card">
+            <div class="py-2 section-box__title d-flex justify-content-between align-items-center">
+                <p class="h5"><i class="fas fa-user-alt"></i>&nbsp Perfil</p>
+                <div class="d-flex">
+                    <a href="{{ path('app_user_index') }}"><i class="fas fa-angle-double-left fa-lg"></i></a>
+                    <a href="{{ path('app_user_edit', {'id': user.id}) }}" type="button" id="edit-profile-button" class="px-3"><i class="fas fa-edit text-warning"></i></a>
+                    <div class="pe-3">{% include "admin_panel/user/_block_form.html.twig" %}</div>
+                    {{ include('admin_panel/user/_delete_form.html.twig') }}
+                </div>
+            </div>
+        
+            <table class="table">
+                <div class="sidebar-profile-img mb-3" style="background-image: url({{ asset('resources/media/admin/profiles/'~user.image) }});"></div>
+                
+                <tr class="mb-3">
+                    <td class="ms-2"><b class="me-2">Email:</b> {{ user.email }}</td>
+                </tr>
+        
+                <tr class="mb-3">
+                    <td class="ms-2"><b class="me-2">Nombre:</b> {{ user.name }}</td>
+                </tr>
+        
+                <tr class="mb-3">
+                    <td class="ms-2"><b class="me-2">Primer apellido:</b> {{ user.firstname }}</td>
+                </tr>
+        
+                <tr class="mb-3">
+                    <td class="ms-2"><b class="me-2">Segundo apellido:</b> {{ user.lastname }}</td>
+                </tr>
+
+                <tr class="mb-3">
+                    <td class="ms-2"><b class="me-2">Roles:</b> {{ user.roles ? user.roles|json_encode : '' }}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+{% endblock %}

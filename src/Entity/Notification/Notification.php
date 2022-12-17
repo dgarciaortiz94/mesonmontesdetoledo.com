@@ -24,59 +24,21 @@ class Notification
 
     private ?string $label = "Notificación";
 
-    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'notifications')]
-    private Collection $user;
-
-    #[ORM\Column]
-    private ?bool $watched = null;
-
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
+
+    #[ORM\OneToMany(mappedBy: 'notification', targetEntity: NotificationUser::class, orphanRemoval: true)]
+    private Collection $reportedUsers;
 
     public function __construct()
     {
         $this->user = new ArrayCollection();
+        $this->reportedUsers = new ArrayCollection();
     }
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    /**
-     * @return Collection<int, User>
-     */
-    public function getUser(): Collection
-    {
-        return $this->user;
-    }
-
-    public function addUser(User $user): self
-    {
-        if (!$this->user->contains($user)) {
-            $this->user->add($user);
-        }
-
-        return $this;
-    }
-
-    public function removeUser(User $user): self
-    {
-        $this->user->removeElement($user);
-
-        return $this;
-    }
-
-    public function isWatched(): ?bool
-    {
-        return $this->watched;
-    }
-
-    public function setWatched(bool $watched): self
-    {
-        $this->watched = $watched;
-
-        return $this;
     }
 
     /**
@@ -107,6 +69,36 @@ class Notification
     public function setCreatedAt(\DateTimeImmutable $createdAt): self
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, NotificationUser>
+     */
+    public function getReportedUsers(): Collection
+    {
+        return $this->reportedUsers;
+    }
+
+    public function addReportedUser(NotificationUser $reportedUser): self
+    {
+        if (!$this->reportedUsers->contains($reportedUser)) {
+            $this->reportedUsers->add($reportedUser);
+            $reportedUser->setNotification($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReportedUser(NotificationUser $reportedUser): self
+    {
+        if ($this->reportedUsers->removeElement($reportedUser)) {
+            // set the owning side to null (unless already changed)
+            if ($reportedUser->getNotification() === $this) {
+                $reportedUser->setNotification(null);
+            }
+        }
 
         return $this;
     }

@@ -1,7 +1,7 @@
-<div class="notification user-blocked-notification {% if(notification.isWatched) %}disabled{% endif %}">
-    <div class="profile-img" style="background-image: url({{ asset('resources/media/admin/profiles/'~notification.userBlocked.image) }});"></div>
+<div class="notification user-blocked-notification {% if(receivedNotification.isWatched) %}disabled{% endif %}">
+    <div class="profile-img" style="background-image: url({{ asset('resources/media/admin/profiles/'~receivedNotification.notification.userBlocked.image) }});"></div>
     <div class="ms-2">
-        <p class="notification__label">{{ notification.label }}</p>
-        <a href="{{ path('app_user_show', {'id': notification.userBlocked.id}) }}">Ver usuario</a>
+        <p class="notification__label">{{ receivedNotification.notification.label }}</p>
+        <a href="{{ path('app_user_show', {'id': receivedNotification.notification.userBlocked.id}) }}">Ver usuario</a>
     </div>
 </div>

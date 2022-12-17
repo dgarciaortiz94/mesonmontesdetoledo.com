@@ -4,17 +4,18 @@ namespace App\Model\Notifications;
 
 use App\Entity\Notification\NewUserNotification;
 use App\Entity\Notification\Notification;
+use App\Entity\Notification\NotificationUser;
 use Twig\Environment;
 
 class NewUserNotificationBox {
 
     private Environment $twig;
-    private Notification $notification;
+    private NotificationUser $recivedNotification;
 
-    public function __construct(Notification $notification, Environment $twig)
+    public function __construct(NotificationUser $recivedNotification, Environment $twig)
     {
         $this->twig = $twig;
-        $this->notification = $notification;
+        $this->recivedNotification = $recivedNotification;
     }
     
     public function create(): Notification
@@ -25,7 +26,7 @@ class NewUserNotificationBox {
     public function render(): string
     {
         return $this->twig->render("components/admin_panel/toolbar/notifications/newUserNotification.html.twig", [
-            "notification" => $this->notification
+            "receivedNotification" => $this->recivedNotification
         ]);
     }
 }
