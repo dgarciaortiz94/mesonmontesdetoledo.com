@@ -221,20 +221,4 @@ class UserController extends AbstractController
         return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
     }
 
-
-
-    // #[Route('/check-notifications/mark-as-viewed', name: 'app_user_check-notifications', methods: ['GET'])]
-    // public function checkNotifications(NotificationRepository $notificationRepository): Response
-    // {
-    //     $noViewedNotifications = $notificationRepository->findBy(['user' => $this->getUser(), 'isViewed' => false]);
-
-
-
-    //     foreach ($noViewedNotifications as $notification) {
-    //         $notification->setIsViewed(true);
-    //         $notificationRepository->save($notification, true);
-    //     }
-
-    //     return $this->json(["success" => true]);
-    // }
 }
