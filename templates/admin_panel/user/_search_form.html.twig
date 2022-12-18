@@ -4,7 +4,7 @@
     {{ form_start(form) }}
         {% for field in form.children %}
             {% set fieldClass = (field.vars.attr.class is defined) ? field.vars.attr.class : '' %}
-            {{ form_label(field)}}
+            {{ (field.vars.name != "_token") ? form_label(field) : ""}}
             {{ form_widget(field, {'attr': {'class': (error_origin is defined and error_origin == field.vars.name) ? 'form-error' : fieldClass} }) }}
         {% endfor %}
 

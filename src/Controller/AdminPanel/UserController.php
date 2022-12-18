@@ -46,15 +46,27 @@ class UserController extends AbstractController
             
             $searchArray = [];
 
-            if ($email) $searchArray['email'] = $email;
-            if ($name) $searchArray['name'] = $name;
-            if ($firstname) $searchArray['firstname'] = $firstname;
-            if ($lastname) $searchArray['lastname'] = $lastname;
-            if ($registeredFrom) $searchArray['creationDate'] >= $registeredFrom;
-            if ($registeredTo) $searchArray['creationDate'] <= $registeredTo;
-            if (! is_null($isActive)) $searchArray['isActive'] = $isActive;
+            if ($email) array_push($searchArray, "u.email LIKE '%$email%'");
+            if ($name) array_push($searchArray, "u.name LIKE '%$name%'");
+            if ($firstname) array_push($searchArray, "u.firstname LIKE '%$firstname%'");
+            if ($lastname) array_push($searchArray, "u.lastname LIKE '%$lastname%'");
+            if ($registeredFrom) { 
+                $dateFormat = $registeredFrom->format('Y-m-d');
+                array_push($searchArray, "u.creationDate >= '$dateFormat'");
+            }
+            if ($registeredTo) { 
+                $dateFormat = $registeredTo->format('Y-m-d');
+                array_push($searchArray, "u.creationDate <= '$dateFormat'");
+            }
+            if (! is_null($isActive)) array_push($searchArray, "u.isActive = '$isActive'");
 
-            $users = $userRepository->findBy($searchArray);
+            $queryBuilder = $userRepository->createQueryBuilder('u');
+
+            foreach ($searchArray as $condition) {
+                $queryBuilder->andWhere($condition);
+            }
+
+            $users = $queryBuilder->getQuery()->getResult();
         }
 
         return $this->render('admin_panel/user/index.html.twig', [

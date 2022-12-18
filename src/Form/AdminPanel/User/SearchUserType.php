@@ -49,6 +49,7 @@ class SearchUserType extends AbstractType
                 'required' => false,
                 'mapped' => false,
                 'label' => 'Registrado desde',
+                'html5' => false,
                 'attr' => [
                     'class' => 'input-date',
                 ]
@@ -57,6 +58,7 @@ class SearchUserType extends AbstractType
                 'required' => false,
                 'mapped' => false,
                 'label' => 'Registrado hasta',
+                'html5' => false,
                 'attr' => [
                     'class' => 'input-date',
                 ]
