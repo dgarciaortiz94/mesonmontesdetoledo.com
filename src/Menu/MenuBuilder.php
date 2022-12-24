@@ -48,4 +48,18 @@ class MenuBuilder
 
         return $menu;
     }
+
+
+    public function createWebsiteMainMenu(array $options): ItemInterface
+    {
+        $menu = $this->factory->createItem('root');
+
+        $menu->addChild('El Mesón', ['route' => 'app_website_home']);
+        $menu->addChild('Nuestra carta', ['route' => 'app_website_menu']);
+        $menu->addChild('Terraza de verano', ['route' => 'app_website_menu']);
+        $menu->addChild('Horario', ['route' => 'app_website_menu']);
+        $menu->addChild('Dónde estamos', ['route' => 'app_website_menu']);
+
+        return $menu;
+    }
 }

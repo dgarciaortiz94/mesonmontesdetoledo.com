@@ -1,0 +1,51 @@
+{% extends 'client_layout.html.twig' %}
+
+{% block stylesheets %}
+{{ parent() }}
+
+<link rel="stylesheet" href="{{ asset('build/client_home.css') }}">
+<link rel="stylesheet" href="{{ asset('libraries/fullPage.js/dist/fullpage.css') }}">
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+
+<script src="{{ asset('libraries/fullPage.js/dist/fullpage.js') }}"></script>
+{% endblock %}
+
+{% block cssInLine %}
+    <style>
+        .after-header {
+            background-image: url(resources/media/client/header_main.jpg);
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+        }
+    </style>
+{% endblock %}
+
+{% block section %}
+    <div id="fullpage">
+        <div class="section after-header"  style="height: 85vh !important;">
+            <div class="text-center text-light display-4">
+                <div>Bienvenido</div>
+                <div>a</div>
+                <div>Mesón Montes de Toledo</div>
+            </div>
+        </div>
+        <div class="section" style="height: 100vh; background-color: blue"> Slide 2 </div>
+        <div class="section" style="height: 100vh; background-color: green"> Slide 3 </div>
+        <div class="section" style="height: 100vh; background-color: yellow"> Slide 4 </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', e => {
+            var myFullpage = new fullpage('#fullpage', {
+                autoScrolling:true,
+                scrollHorizontally: true
+            });
+        })
+    </script>
+{% endblock %}

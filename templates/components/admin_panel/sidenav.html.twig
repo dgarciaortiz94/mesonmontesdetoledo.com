@@ -2,19 +2,19 @@
     <div class="sidenav">
         <nav class="menu">
             {% for item in knp_menu_get('adminMain').children %}
-                    {% if (not app.request.attributes.get('_route_params')) and (path(app.request.attributes.get('_route')) == item.uri) %}
-                        <div class="menu__item p-3 current">
+                {% if (not app.request.attributes.get('_route_params')) and (path(app.request.attributes.get('_route')) == item.uri) %}
+                    <div class="menu__item p-3 current">
+                        <i class="{{ item.getExtra('icon') }}"></i>
+                        <span class="mx-2">{{ item.name }}</span>
+                    </div>
+                {% else %}
+                    <a href="{{ item.uri }}">
+                        <div class="menu__item p-3">
                             <i class="{{ item.getExtra('icon') }}"></i>
                             <span class="mx-2">{{ item.name }}</span>
                         </div>
-                    {% else %}
-                        <a href="{{ item.uri }}">
-                            <div class="menu__item p-3">
-                                <i class="{{ item.getExtra('icon') }}"></i>
-                                <span class="mx-2">{{ item.name }}</span>
-                            </div>
-                        </a>
-                    {% endif %}
+                    </a>
+                {% endif %}
             {% endfor %}
         </nav>
     </div>

@@ -1,0 +1,45 @@
+@import 'components/client_layout/__client_layout_vars.scss';
+
+.header {
+    background-color: #141418;
+    color: #fbfbfb;
+    padding: 0px 30px;
+    // height: 12vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    z-index: 1;
+}
+
+.header > div:first-child {
+    padding: 0 55px;
+    padding-top: 10px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #777777;
+    width: 100%;
+}
+
+.header > div:last-child {
+    padding: 0 50px;
+    width: 100%;
+}
+
+.header__phone {
+    font-size: 0.8em;
+}
+
+.navbar .nav-link {
+    width: 150px;
+    padding: 24px;
+    text-align: center;
+}
+
+.navbar .nav-link.active {
+    background-color: #FFC800;
+}
+
+.navbar .nav-link:hover {
+    background-color: #FFC800;
+}

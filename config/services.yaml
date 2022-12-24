@@ -27,3 +27,4 @@ services:
         arguments: ["@knp_menu.factory"]
         tags:
             - { name: knp_menu.menu_builder, method: createAdminMainMenu, alias: adminMain } # The alias is what is used to retrieve the menu
+            - { name: knp_menu.menu_builder, method: createWebsiteMainMenu, alias: websiteMain } 
